@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/powerlesha.github.io/my-app/static/css/main.3751fad5.css",
+    "main.js": "/powerlesha.github.io/my-app/static/js/main.6fb215ca.js",
+    "static/js/787.28cb0dcd.chunk.js": "/powerlesha.github.io/my-app/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/powerlesha.github.io/my-app/index.html",
+    "main.3751fad5.css.map": "/powerlesha.github.io/my-app/static/css/main.3751fad5.css.map",
+    "main.6fb215ca.js.map": "/powerlesha.github.io/my-app/static/js/main.6fb215ca.js.map",
+    "787.28cb0dcd.chunk.js.map": "/powerlesha.github.io/my-app/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3751fad5.css",
+    "static/js/main.6fb215ca.js"
+  ]
+}
