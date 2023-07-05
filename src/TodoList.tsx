@@ -68,7 +68,39 @@ function TodoList(props: PropsType) {
       <AddItemForm addItem={addTask} />
 
       <div className="tasks-counter">
-        {props.filter !== "all" && props.task.length > 1
+        {(() => {
+          if (props.filter !== "all" && props.task.length > 1) {
+            return `You have ${props.task.length} ${props.filter} tasks`;
+          } else if (props.filter !== "all" && props.task.length === 1) {
+            return `You have ${props.task.length} ${props.filter} task`;
+          } else if (props.filter && props.task.length === 0) {
+            return "You don't have any tasks";
+          } else if (props.filter === "all" && props.task.length > 1) {
+            return `You have ${props.task.length} tasks`;
+          } else {
+            return `You have ${props.task.length} task`;
+          }
+        })()}
+
+        {/* {(() => {
+          switch (true) {
+            case props.filter !== "all" && props.task.length > 1:
+              return (
+                "You have " + props.task.length + " " + props.filter + " tasks"
+              );
+            case props.filter !== "all" && props.task.length === 1:
+              return (
+                "You have " + props.task.length + " " + props.filter + " task"
+              );
+            case props.filter && props.task.length === 0:
+              return "You don't have any tasks";
+            case props.filter === "all" && props.task.length > 1:
+              return "You have " + props.task.length + " tasks";
+            default:
+              return "You have " + props.task.length + " task";
+          }
+        })()} */}
+        {/* {props.filter !== "all" && props.task.length > 1
           ? "You have " + props.task.length + " " + props.filter + "  tasks"
           : "" || (props.filter !== "all" && props.task.length === 1)
           ? "You have " + props.task.length + " " + props.filter + " task"
@@ -76,7 +108,7 @@ function TodoList(props: PropsType) {
           ? "You don't have any tasks"
           : "" || (props.filter === "all" && props.task.length > 1)
           ? "You have " + props.task.length + " tasks"
-          : "You have " + props.task.length + " task"}
+          : "You have " + props.task.length + " task"} */}
       </div>
 
       <ul>
