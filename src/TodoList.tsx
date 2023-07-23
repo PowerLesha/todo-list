@@ -31,34 +31,45 @@ type PropsType = {
   changeTodoListTitle: (id: string, newTitle: string) => void;
 };
 
-function TodoList(props: PropsType) {
-  const onAllClickHandler = () => props.changeFilter("all", props.id);
-  const onCompletedClickHandler = () =>
-    props.changeFilter("completed", props.id);
-  const onActiveClickHandler = () => props.changeFilter("active", props.id);
+function TodoList({
+  title,
+  id,
+  removeTask,
+  removeTodoList,
+  changeFilter,
+  filter,
+  task,
+  addItem,
+  changeTaskStatus,
+  changeTaskTitle,
+  changeTodoListTitle,
+}: PropsType) {
+  const onAllClickHandler = () => changeFilter("all", id);
+  const onCompletedClickHandler = () => changeFilter("completed", id);
+  const onActiveClickHandler = () => changeFilter("active", id);
 
-  let removeTask = () => {
-    if (window.confirm("Are you sure ?")) props.removeTodoList(props.id);
+  const handleRemoveTask = () => {
+    if (window.confirm("Are you sure?")) removeTodoList(id);
   };
 
-  const addTask = (title: string) => {
-    props.addItem(title, props.id);
+  const addTask = (taskTitle: string) => {
+    addItem(taskTitle, id);
   };
 
-  const changeTodoListTitle = (newTitle: string) => {
-    props.changeTodoListTitle(props.id, newTitle);
+  const handleChangeTodoListTitle = (newTitle: string) => {
+    changeTodoListTitle(id, newTitle);
   };
 
   return (
     <div className="boss">
       <div className="editable-span">
         <h3>
-          <EditableSpan title={props.title} onChange={changeTodoListTitle} />
+          <EditableSpan title={title} onChange={handleChangeTodoListTitle} />
 
           <button
             title="delete"
             className="remove-buttons"
-            onClick={removeTask}
+            onClick={handleRemoveTask}
           >
             X
           </button>
@@ -69,69 +80,70 @@ function TodoList(props: PropsType) {
 
       <div className="tasks-counter">
         {(() => {
-          if (props.filter !== "all" && props.task.length > 1) {
-            return `You have ${props.task.length} ${props.filter} tasks`;
-          } else if (props.filter !== "all" && props.task.length === 1) {
-            return `You have ${props.task.length} ${props.filter} task`;
-          } else if (props.filter && props.task.length === 0) {
+          if (filter !== "all" && task.length > 1) {
+            return `You have ${task.length} ${filter} tasks`;
+          } else if (filter !== "all" && task.length === 1) {
+            return `You have ${task.length} ${filter} task`;
+          } else if (filter && task.length === 0) {
             return "You don't have any tasks";
-          } else if (props.filter === "all" && props.task.length > 1) {
-            return `You have ${props.task.length} tasks`;
+          } else if (filter === "all" && task.length > 1) {
+            return `You have ${task.length} tasks`;
           } else {
-            return `You have ${props.task.length} task`;
+            return `You have ${task.length} task`;
           }
         })()}
 
         {/* {(() => {
           switch (true) {
-            case props.filter !== "all" && props.task.length > 1:
+            case filter !== "all" && task.length > 1:
               return (
-                "You have " + props.task.length + " " + props.filter + " tasks"
+                "You have " + task.length + " " + filter + " tasks"
               );
-            case props.filter !== "all" && props.task.length === 1:
+            case filter !== "all" && task.length === 1:
               return (
-                "You have " + props.task.length + " " + props.filter + " task"
+                "You have " + task.length + " " + filter + " task"
               );
-            case props.filter && props.task.length === 0:
+            case filter && task.length === 0:
               return "You don't have any tasks";
-            case props.filter === "all" && props.task.length > 1:
-              return "You have " + props.task.length + " tasks";
+            case filter === "all" && task.length > 1:
+              return "You have " + task.length + " tasks";
             default:
-              return "You have " + props.task.length + " task";
+              return "You have " + task.length + " task";
           }
-        })()} */}
-        {/* {props.filter !== "all" && props.task.length > 1
-          ? "You have " + props.task.length + " " + props.filter + "  tasks"
-          : "" || (props.filter !== "all" && props.task.length === 1)
-          ? "You have " + props.task.length + " " + props.filter + " task"
-          : "" || (props.filter && props.task.length === 0)
+        })()}  */}
+
+        {/* {filter !== "all" && task.length > 1
+          ? "You have " + task.length + " " + filter + "  tasks"
+          : "" || (filter !== "all" && task.length === 1)
+          ? "You have " + task.length + " " + filter + " task"
+          : "" || (filter && task.length === 0)
           ? "You don't have any tasks"
-          : "" || (props.filter === "all" && props.task.length > 1)
-          ? "You have " + props.task.length + " tasks"
-          : "You have " + props.task.length + " task"} */}
+          : "" || (filter === "all" && task.length > 1)
+          ? "You have " + task.length + " tasks"
+          : "You have " + task.length + " task"} */}
       </div>
 
       <ul>
-        {props.task.map((t) => (
+        {task.map((t) => (
           <li className={t.isDone ? "is-done" : ""} key={t.id}>
             <input
               className="main-input"
               type="checkbox"
               checked={t.isDone}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                props.changeTaskStatus(t.id, e.currentTarget.checked, props.id)
+                changeTaskStatus(t.id, e.currentTarget.checked, id)
               }
             />
             <EditableSpan
               title={t.title}
               onChange={(newTitle: string) => {
-                props.changeTaskTitle(t.id, newTitle, props.id);
+                changeTaskTitle(t.id, newTitle, id);
               }}
             />
             <button
               title="delete"
               className="remove-buttons"
-              onClick={() => props.removeTask(t.id, props.id)}
+              onClick={() => removeTask(t.id, id)}
             >
               X
             </button>
@@ -141,25 +153,21 @@ function TodoList(props: PropsType) {
 
       <div className="buttons">
         <button
-          className={props.filter === "all" ? "active-filter" : "tasks-buttons"}
+          className={filter === "all" ? "active-filter" : "tasks-buttons"}
           onClick={onAllClickHandler}
         >
           All
         </button>
 
         <button
-          className={
-            props.filter === "active" ? "active-filter" : "tasks-buttons"
-          }
+          className={filter === "active" ? "active-filter" : "tasks-buttons"}
           onClick={onActiveClickHandler}
         >
           Active
         </button>
 
         <button
-          className={
-            props.filter === "completed" ? "active-filter" : "tasks-buttons"
-          }
+          className={filter === "completed" ? "active-filter" : "tasks-buttons"}
           onClick={onCompletedClickHandler}
         >
           Completed
