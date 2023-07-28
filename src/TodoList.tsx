@@ -2,6 +2,7 @@ import React from "react";
 import { FilterValuesType } from "./App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
+import { Checkbox } from "@mui/material";
 
 export type TaksType = {
   id: string;
@@ -126,9 +127,8 @@ function TodoList({
       <ul>
         {task.map((t) => (
           <li className={t.isDone ? "is-done" : ""} key={t.id}>
-            <input
+            <Checkbox
               className="main-input"
-              type="checkbox"
               checked={t.isDone}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 changeTaskStatus(t.id, e.currentTarget.checked, id)
