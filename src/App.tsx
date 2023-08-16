@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TodoList, { TaksType } from "./TodoList";
 import { v4 } from "uuid";
@@ -77,8 +77,6 @@ function App() {
 
   let todolistId3 = v4();
 
-  let todolistId4 = v4();
-
   let [todolists, setTodoLists] = useState<Array<TodolistType>>([
     { id: todolistId1, title: "What ot learn", filter: "active" },
     { id: todolistId2, title: "What to buy", filter: "completed" },
@@ -115,6 +113,27 @@ function App() {
     setTodoLists([todolist, ...todolists]);
     setTask({ ...task, [todolist.id]: [] });
   }
+
+  useEffect(() => {
+    // Save todolists and task to localStorage
+    localStorage.setItem("todolists", JSON.stringify(todolists));
+    localStorage.setItem("task", JSON.stringify(task));
+  }, [todolists, task]);
+  const savedTodoLists = localStorage.getItem("todolists");
+  const savedTasks = localStorage.getItem("task");
+  useEffect(() => {
+    if (savedTodoLists) {
+      const parsedTodoLists = JSON.parse(savedTodoLists);
+      setTodoLists(parsedTodoLists);
+    }
+
+    if (savedTasks) {
+      const parsedTasks = JSON.parse(savedTasks);
+      setTask(parsedTasks);
+    }
+    console.log(savedTodoLists);
+    console.log(savedTasks);
+  }, []);
 
   return (
     <div>
