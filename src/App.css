@@ -47,7 +47,8 @@
 }
 
 .active-filter {
-  background-color: rgb(200, 83, 48);
+  font-size: large;
+  background-color: rgb(48, 119, 200);
   border-radius: 5px;
 }
 
@@ -116,6 +117,7 @@
 }
 
 .tasks-buttons {
+  font-size: large;
   cursor: pointer;
   border-radius: 5px;
   transition-duration: 0.2s;
@@ -130,11 +132,12 @@
   margin-block: 10px;
 }
 .tasks-buttons:hover {
-  background-color: rgb(200, 83, 48);
+  background-color: rgb(66, 48, 200);
 }
 
 .tasks-buttons:active {
-  background-color: rgb(200, 83, 48);
+  font-size: large;
+  background-color: rgb(65, 102, 212);
   box-shadow: 0 3px #666;
   transform: translateY(2px);
 }
