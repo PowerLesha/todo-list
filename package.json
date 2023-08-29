@@ -157,5 +157,6 @@
   },
   "devDependencies": {
     "@types/react-datepicker": "^4.11.2"
-  }
+  },
+  "homepage": "https://powerlesha.github.io/todo-list/"
 }
