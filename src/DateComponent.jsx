@@ -15,7 +15,6 @@ const DateComponent = () => {
 
   return (
     <div>
-      <h1>Your Component with Current Date</h1>
       <p>Current Date and Time: {currentDate.toLocaleString()}</p>
     </div>
   );

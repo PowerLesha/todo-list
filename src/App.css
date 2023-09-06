@@ -6,6 +6,12 @@
   flex-wrap: wrap;
 }
 
+.date-component {
+  margin-left: 900px;
+  position: absolute;
+  margin-bottom: 100px;
+}
+
 .boss {
   display: flex;
   flex-direction: column;

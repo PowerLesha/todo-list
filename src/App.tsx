@@ -135,14 +135,14 @@ function App() {
     console.log(savedTodoLists);
     console.log(savedTasks);
   }, []);
-  const currentDate = new Date();
+
   return (
     <div>
       <div className="task-list">
         <h1>
           Add a new task list <CiCircleList />
         </h1>
-        <div>
+        <div className="date-component">
           <DateComponent />
         </div>
         <div className="all-tasklists">
