@@ -4,6 +4,7 @@ import TodoList, { TaksType } from "./TodoList";
 import { v4 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { CiCircleList } from "react-icons/ci";
+import DateComponent from "./DateComponent";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -141,6 +142,9 @@ function App() {
         <h1>
           Add a new task list <CiCircleList />
         </h1>
+        <div className="date-component">
+          <DateComponent />
+        </div>
         <div className="all-tasklists">
           <AddItemForm addItem={addList} />
         </div>
