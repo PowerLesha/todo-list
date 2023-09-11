@@ -7,7 +7,7 @@
 }
 
 .date-component {
-  margin-left: 900px;
+  margin-left: 300px;
   position: absolute;
   margin-bottom: 100px;
 }
@@ -152,11 +152,24 @@
   color: #f4472d;
 
   margin-left: 2px;
-  height: 21px;
+  height: 20px;
   font-size: 11px;
-  padding-top: 1.13px;
+
   transition-duration: 0.2s;
   box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+.deadline-button {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 11px;
+  height: 20px;
+  justify-content: space-around;
+  width: 25px;
+  margin-left: 2px;
+  transition-duration: 0.2s;
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -164,7 +177,8 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 11px;
-  height: 21px;
+  padding-top: 0.5px;
+
   justify-content: space-around;
   width: 20px;
   margin-left: 5px;

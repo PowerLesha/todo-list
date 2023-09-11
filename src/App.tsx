@@ -4,7 +4,7 @@ import TodoList, { TaksType } from "./TodoList";
 import { v4 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { CiCircleList } from "react-icons/ci";
-import DateComponent from "./DateComponent";
+import ClockComponent from "./ClockComponent";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -14,9 +14,10 @@ type TodolistType = {
 };
 
 type TasksStateType = {
-  [key: string]: Array<TaksType>;
+  [key: string]: Array<TaksType & { deadline: boolean }>;
 };
 function App() {
+  const [deadline, setDeadline] = useState(false);
   function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -27,6 +28,18 @@ function App() {
     setTask({ ...task });
   }
 
+  function changeDeadlineDate(id: string, todolistId: string) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.deadline = !t.deadline;
+        }
+      });
+      setTask({ ...task });
+    }
+  }
+  console.log(deadline);
   function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -49,6 +62,7 @@ function App() {
       id: v4(),
       title: title,
       isDone: false,
+      deadline: false,
     };
     let tasks = task[todolistId];
     let newTasks = [newTask, ...tasks];
@@ -92,17 +106,17 @@ function App() {
 
   let [task, setTask] = useState<TasksStateType>({
     [todolistId1]: [
-      { id: v4(), title: "blabla", isDone: true },
-      { id: v4(), title: "Html", isDone: true },
-      { id: v4(), title: "gabascript", isDone: false },
-      { id: v4(), title: "hahahah", isDone: true },
-      { id: v4(), title: "hahahah", isDone: true },
+      { id: v4(), title: "blabla", isDone: true, deadline: false },
+      { id: v4(), title: "Html", isDone: true, deadline: false },
+      { id: v4(), title: "gabascript", isDone: false, deadline: false },
+      { id: v4(), title: "hahahah", isDone: true, deadline: false },
+      { id: v4(), title: "hahahah", isDone: true, deadline: false },
     ],
     [todolistId2]: [
-      { id: v4(), title: "book", isDone: true },
-      { id: v4(), title: "coffee", isDone: false },
+      { id: v4(), title: "book", isDone: true, deadline: false },
+      { id: v4(), title: "coffee", isDone: false, deadline: false },
     ],
-    [todolistId3]: [{ id: v4(), title: "smth", isDone: true }],
+    [todolistId3]: [{ id: v4(), title: "smth", isDone: true, deadline: false }],
   });
 
   function addList(title: string) {
@@ -143,7 +157,7 @@ function App() {
           Add a new task list <CiCircleList />
         </h1>
         <div className="date-component">
-          <DateComponent />
+          <ClockComponent />
         </div>
         <div className="all-tasklists">
           <AddItemForm addItem={addList} />
@@ -165,7 +179,9 @@ function App() {
 
           return (
             <TodoList
+              setDeadline={setDeadline}
               key={tl.id}
+              deadline={deadline}
               id={tl.id}
               filter={tl.filter}
               removeTodoList={removeTodoList}
@@ -177,6 +193,7 @@ function App() {
               changeTaskStatus={changeTaskStatus}
               changeTaskTitle={changeTaskTitle}
               changeTodoListTitle={changeTodoListTitle}
+              changeDeadlineDate={changeDeadlineDate}
             />
           );
         })}

@@ -1,21 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { FilterValuesType } from "./App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
 import { Checkbox } from "@mui/material";
+import DatePicker from "react-date-picker";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
 
 export type TaksType = {
   id: string;
   title: string;
   isDone: boolean;
+  deadline?: boolean;
 };
 
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 type PropsType = {
+  deadline: boolean;
+  setDeadline: Function;
   title: string;
   id: string;
   removeTask: Function;
   removeTodoList: Function;
   changeFilter: Function;
+  changeDeadlineDate: Function;
   filter: FilterValuesType;
   task: Array<TaksType>;
   addItem: (title: string, todolistId: string) => void;
@@ -44,7 +53,12 @@ function TodoList({
   changeTaskStatus,
   changeTaskTitle,
   changeTodoListTitle,
+  changeDeadlineDate,
+  deadline,
+  setDeadline,
 }: PropsType) {
+  const [value, onChange] = useState<Value>(new Date());
+
   const onAllClickHandler = () => changeFilter("all", id);
   const onCompletedClickHandler = () => changeFilter("completed", id);
   const onActiveClickHandler = () => changeFilter("active", id);
@@ -147,6 +161,13 @@ function TodoList({
             >
               X
             </button>
+            <button
+              className="deadline-button"
+              onClick={() => changeDeadlineDate(t.id, id)}
+            >
+              D
+            </button>
+            {t.deadline && <DatePicker onChange={onChange} value={value} />}
           </li>
         ))}
       </ul>
