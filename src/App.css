@@ -12,6 +12,19 @@
   margin-bottom: 100px;
 }
 
+.react-date-picker__wrapper {
+  flex-direction: row !important;
+
+  position: relative !important;
+
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  border: thin solid gray;
+
+  width: fit-content;
+}
+
 .boss {
   display: flex;
   flex-direction: column;

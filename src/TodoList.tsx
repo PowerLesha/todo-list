@@ -167,7 +167,13 @@ function TodoList({
               onClick={() => changeDeadlineDate(t.id, id)}
             />
 
-            {t.deadline && <DatePicker onChange={onChange} value={value} />}
+            {t.deadline && (
+              <DatePicker
+                onChange={onChange}
+                value={value}
+                className="react-date-picker__wrapper"
+              />
+            )}
           </li>
         ))}
       </ul>
