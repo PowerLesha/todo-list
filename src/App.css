@@ -161,6 +161,7 @@
 }
 
 .deadline-button {
+  margin-bottom: -6px;
   cursor: pointer;
   font-weight: 600;
   font-size: 11px;

@@ -6,6 +6,7 @@ import { Checkbox } from "@mui/material";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
+import { FcCalendar } from "react-icons/fc";
 
 export type TaksType = {
   id: string;
@@ -161,12 +162,11 @@ function TodoList({
             >
               X
             </button>
-            <button
+            <FcCalendar
               className="deadline-button"
               onClick={() => changeDeadlineDate(t.id, id)}
-            >
-              D
-            </button>
+            />
+
             {t.deadline && <DatePicker onChange={onChange} value={value} />}
           </li>
         ))}
