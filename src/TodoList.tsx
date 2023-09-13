@@ -12,12 +12,14 @@ export type TaksType = {
   id: string;
   title: string;
   isDone: boolean;
-  deadline?: boolean;
+  deadline: boolean;
+  date: any;
 };
 
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
 type PropsType = {
+  changeDeadline: Function;
+  value: any;
+  onChange: any;
   deadline: boolean;
   setDeadline: Function;
   title: string;
@@ -43,6 +45,9 @@ type PropsType = {
 };
 
 function TodoList({
+  changeDeadline,
+  value,
+  onChange,
   title,
   id,
   removeTask,
@@ -58,8 +63,6 @@ function TodoList({
   deadline,
   setDeadline,
 }: PropsType) {
-  const [value, onChange] = useState<Value>(new Date());
-
   const onAllClickHandler = () => changeFilter("all", id);
   const onCompletedClickHandler = () => changeFilter("completed", id);
   const onActiveClickHandler = () => changeFilter("active", id);
@@ -75,7 +78,8 @@ function TodoList({
   const handleChangeTodoListTitle = (newTitle: string) => {
     changeTodoListTitle(id, newTitle);
   };
-
+  console.log(value);
+  console.log(id, deadline);
   return (
     <div className="boss">
       <div className="editable-span">
@@ -164,13 +168,13 @@ function TodoList({
             </button>
             <FcCalendar
               className="deadline-button"
-              onClick={() => changeDeadlineDate(t.id, id)}
+              onClick={() => changeDeadlineDate(t.id, id, t.deadline, t.date)}
             />
 
             {t.deadline && (
               <DatePicker
-                onChange={onChange}
-                value={value}
+                onChange={(newDate) => changeDeadline(t.id, id, newDate)}
+                value={t.date}
                 className="react-date-picker__wrapper"
               />
             )}

@@ -12,12 +12,14 @@ type TodolistType = {
   title: string;
   filter: FilterValuesType;
 };
-
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 type TasksStateType = {
-  [key: string]: Array<TaksType & { deadline: boolean }>;
+  [key: string]: Array<TaksType & { deadline: boolean } & { date: any }>;
 };
 function App() {
   const [deadline, setDeadline] = useState(false);
+  const [value, onChange] = useState<Value>(null);
   function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -28,8 +30,9 @@ function App() {
     setTask({ ...task });
   }
 
-  function changeDeadlineDate(id: string, todolistId: string) {
+  function changeDeadlineDate(id: string, todolistId: string, date: any) {
     let tasks = task[todolistId];
+
     if (tasks !== undefined) {
       tasks.forEach((t) => {
         if (t.id === id) {
@@ -39,6 +42,19 @@ function App() {
       setTask({ ...task });
     }
   }
+
+  function changeDeadline(id: string, todolistId: string, newDate: Date) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.date = newDate; // Set the date property when the deadline is enabled
+        }
+      });
+      setTask({ ...task });
+    }
+  }
+
   console.log(deadline);
   function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
     let tasks = task[todolistId];
@@ -63,6 +79,7 @@ function App() {
       title: title,
       isDone: false,
       deadline: false,
+      date: value,
     };
     let tasks = task[todolistId];
     let newTasks = [newTask, ...tasks];
@@ -106,17 +123,43 @@ function App() {
 
   let [task, setTask] = useState<TasksStateType>({
     [todolistId1]: [
-      { id: v4(), title: "blabla", isDone: true, deadline: false },
-      { id: v4(), title: "Html", isDone: true, deadline: false },
-      { id: v4(), title: "gabascript", isDone: false, deadline: false },
-      { id: v4(), title: "hahahah", isDone: true, deadline: false },
-      { id: v4(), title: "hahahah", isDone: true, deadline: false },
+      { id: v4(), title: "blabla", isDone: true, deadline: false, date: value },
+      { id: v4(), title: "Html", isDone: true, deadline: false, date: value },
+      {
+        id: v4(),
+        title: "gabascript",
+        isDone: false,
+        deadline: false,
+        date: value,
+      },
+      {
+        id: v4(),
+        title: "hahahah",
+        isDone: true,
+        deadline: false,
+        date: value,
+      },
+      {
+        id: v4(),
+        title: "hahahah",
+        isDone: true,
+        deadline: false,
+        date: value,
+      },
     ],
     [todolistId2]: [
-      { id: v4(), title: "book", isDone: true, deadline: false },
-      { id: v4(), title: "coffee", isDone: false, deadline: false },
+      { id: v4(), title: "book", isDone: true, deadline: false, date: value },
+      {
+        id: v4(),
+        title: "coffee",
+        isDone: false,
+        deadline: false,
+        date: value,
+      },
     ],
-    [todolistId3]: [{ id: v4(), title: "smth", isDone: true, deadline: false }],
+    [todolistId3]: [
+      { id: v4(), title: "smth", isDone: true, deadline: false, date: value },
+    ],
   });
 
   function addList(title: string) {
@@ -179,6 +222,9 @@ function App() {
 
           return (
             <TodoList
+              changeDeadline={changeDeadline}
+              value={value}
+              onChange={onChange}
               setDeadline={setDeadline}
               key={tl.id}
               deadline={deadline}
