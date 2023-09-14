@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FilterValuesType } from "./App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
@@ -8,7 +8,7 @@ import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { FcCalendar } from "react-icons/fc";
 
-export type TaksType = {
+export type TaskType = {
   id: string;
   title: string;
   isDone: boolean;
@@ -18,8 +18,6 @@ export type TaksType = {
 
 type PropsType = {
   changeDeadline: Function;
-  value: any;
-  onChange: any;
   deadline: boolean;
   setDeadline: Function;
   title: string;
@@ -27,9 +25,9 @@ type PropsType = {
   removeTask: Function;
   removeTodoList: Function;
   changeFilter: Function;
-  changeDeadlineDate: Function;
+  setDeadlineCalendar: Function;
   filter: FilterValuesType;
-  task: Array<TaksType>;
+  task: Array<TaskType>;
   addItem: (title: string, todolistId: string) => void;
   changeTaskStatus: (
     taskId: string,
@@ -46,8 +44,6 @@ type PropsType = {
 
 function TodoList({
   changeDeadline,
-  value,
-  onChange,
   title,
   id,
   removeTask,
@@ -59,9 +55,7 @@ function TodoList({
   changeTaskStatus,
   changeTaskTitle,
   changeTodoListTitle,
-  changeDeadlineDate,
-  deadline,
-  setDeadline,
+  setDeadlineCalendar,
 }: PropsType) {
   const onAllClickHandler = () => changeFilter("all", id);
   const onCompletedClickHandler = () => changeFilter("completed", id);
@@ -78,8 +72,7 @@ function TodoList({
   const handleChangeTodoListTitle = (newTitle: string) => {
     changeTodoListTitle(id, newTitle);
   };
-  console.log(value);
-  console.log(id, deadline);
+
   return (
     <div className="boss">
       <div className="editable-span">
@@ -168,7 +161,7 @@ function TodoList({
             </button>
             <FcCalendar
               className="deadline-button"
-              onClick={() => changeDeadlineDate(t.id, id, t.deadline, t.date)}
+              onClick={() => setDeadlineCalendar(t.id, id, t.deadline, t.date)}
             />
 
             {t.deadline && (

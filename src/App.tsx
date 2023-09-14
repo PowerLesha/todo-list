@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import TodoList, { TaksType } from "./TodoList";
+import TodoList, { TaskType } from "./TodoList";
 import { v4 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { CiCircleList } from "react-icons/ci";
@@ -15,11 +15,11 @@ type TodolistType = {
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 type TasksStateType = {
-  [key: string]: Array<TaksType & { deadline: boolean } & { date: any }>;
+  [key: string]: Array<TaskType>;
 };
 function App() {
   const [deadline, setDeadline] = useState(false);
-  const [value, onChange] = useState<Value>(null);
+  const deadlineDate = useState<Value>(null);
   function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -30,9 +30,8 @@ function App() {
     setTask({ ...task });
   }
 
-  function changeDeadlineDate(id: string, todolistId: string, date: any) {
+  function setDeadlineCalendar(id: string, todolistId: string) {
     let tasks = task[todolistId];
-
     if (tasks !== undefined) {
       tasks.forEach((t) => {
         if (t.id === id) {
@@ -55,7 +54,6 @@ function App() {
     }
   }
 
-  console.log(deadline);
   function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -79,7 +77,7 @@ function App() {
       title: title,
       isDone: false,
       deadline: false,
-      date: value,
+      date: deadlineDate,
     };
     let tasks = task[todolistId];
     let newTasks = [newTask, ...tasks];
@@ -123,42 +121,45 @@ function App() {
 
   let [task, setTask] = useState<TasksStateType>({
     [todolistId1]: [
-      { id: v4(), title: "blabla", isDone: true, deadline: false, date: value },
-      { id: v4(), title: "Html", isDone: true, deadline: false, date: value },
+      {
+        id: v4(),
+        title: "Html",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
       {
         id: v4(),
         title: "gabascript",
         isDone: false,
         deadline: false,
-        date: value,
-      },
-      {
-        id: v4(),
-        title: "hahahah",
-        isDone: true,
-        deadline: false,
-        date: value,
-      },
-      {
-        id: v4(),
-        title: "hahahah",
-        isDone: true,
-        deadline: false,
-        date: value,
+        date: deadlineDate,
       },
     ],
     [todolistId2]: [
-      { id: v4(), title: "book", isDone: true, deadline: false, date: value },
+      {
+        id: v4(),
+        title: "book",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
       {
         id: v4(),
         title: "coffee",
         isDone: false,
         deadline: false,
-        date: value,
+        date: deadlineDate,
       },
     ],
     [todolistId3]: [
-      { id: v4(), title: "smth", isDone: true, deadline: false, date: value },
+      {
+        id: v4(),
+        title: "smth",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
     ],
   });
 
@@ -189,8 +190,6 @@ function App() {
       const parsedTasks = JSON.parse(savedTasks);
       setTask(parsedTasks);
     }
-    console.log(savedTodoLists);
-    console.log(savedTasks);
   }, []);
 
   return (
@@ -223,8 +222,6 @@ function App() {
           return (
             <TodoList
               changeDeadline={changeDeadline}
-              value={value}
-              onChange={onChange}
               setDeadline={setDeadline}
               key={tl.id}
               deadline={deadline}
@@ -239,7 +236,7 @@ function App() {
               changeTaskStatus={changeTaskStatus}
               changeTaskTitle={changeTaskTitle}
               changeTodoListTitle={changeTodoListTitle}
-              changeDeadlineDate={changeDeadlineDate}
+              setDeadlineCalendar={setDeadlineCalendar}
             />
           );
         })}
