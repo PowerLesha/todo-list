@@ -23,8 +23,8 @@ type PropsType = {
   title: string;
   id: string;
   removeTask: Function;
-  removeTodoList: Function;
-  changeFilter: Function;
+  removeTodoList: (id: string) => void;
+  changeFilter: (type: FilterValuesType, todolistId: string) => void;
   setDeadlineCalendar: Function;
   filter: FilterValuesType;
   task: Array<TaskType>;
