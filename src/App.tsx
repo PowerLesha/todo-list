@@ -20,10 +20,10 @@ type TasksStateType = {
 };
 function App() {
   const [deadline, setDeadline] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(true);
   const deadlineDate = useState<Value>(null);
   const loginSuccess = (response: any) => {
-    setLogin(true);
+    setLogin(false);
     console.log("Logged in successfully:", response);
   };
 
@@ -201,15 +201,13 @@ function App() {
 
   return (
     <div>
-      {!login && (
-        <GoogleLogin
-          clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
-          buttonText="Login with Google"
-          onSuccess={loginSuccess}
-          onFailure={loginSuccess}
-          cookiePolicy={"single_host_origin"}
-        />
-      )}
+      <GoogleLogin
+        clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
+        buttonText="Login with Google"
+        onSuccess={loginSuccess}
+        onFailure={loginSuccess}
+        cookiePolicy={"single_host_origin"}
+      />
 
       <div className="task-list">
         <h1>
