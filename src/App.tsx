@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import { AddItemForm } from "./AddItemForm";
 import { CiCircleList } from "react-icons/ci";
 import ClockComponent from "./ClockComponent";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import SwitchMode from "./SwitchMode";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -20,12 +20,8 @@ type TasksStateType = {
 };
 function App() {
   const [deadline, setDeadline] = useState(false);
-  const [login, setLogin] = useState(true);
+  const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
-  const loginSuccess = (response: any) => {
-    setLogin(false);
-    console.log("Logged in successfully:", response);
-  };
 
   function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
     let tasks = task[todolistId];
@@ -200,15 +196,8 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <GoogleLogin
-        clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
-        buttonText="Login with Google"
-        onSuccess={loginSuccess}
-        onFailure={loginSuccess}
-        cookiePolicy={"single_host_origin"}
-      />
-
+    <div className={nightMode ? "night-mode" : ""}>
+      <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
       <div className="task-list">
         <h1>
           Add a new task list <CiCircleList />
