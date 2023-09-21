@@ -5,13 +5,16 @@
   max-height: max-content;
   flex-wrap: wrap;
 }
-.login {
-  position: absolute;
-}
 
 .night-mode {
-  background-color: #000000; /* Set your desired background color for night mode */
-  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url("https://images.unsplash.com/photo-1533082385145-b152cdde7ccd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80");
+
+  color: #d1cfcf;
 }
 
 .switch {
@@ -76,7 +79,7 @@
 }
 
 .date-component {
-  margin-left: 300px;
+  margin-left: 250px;
   position: absolute;
   margin-bottom: 100px;
 }

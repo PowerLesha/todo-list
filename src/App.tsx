@@ -25,7 +25,6 @@ function App() {
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
   const loginSuccess = (response: any) => {
-    setLogin(true);
     setLogin(false);
     console.log("Logged in successfully:", response);
   };
@@ -208,7 +207,13 @@ function App() {
         <h1>
           Add a new task list <CiCircleList />
         </h1>
-        <div>
+        <div
+          style={{
+            paddingLeft: "1070px",
+            position: "absolute",
+            maxWidth: "15px",
+          }}
+        >
           <GoogleLogin
             clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
             buttonText="Login with Google"
