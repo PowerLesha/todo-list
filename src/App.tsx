@@ -201,72 +201,74 @@ function App() {
   }, []);
 
   return (
-    <div className={nightMode ? "night-mode" : ""}>
-      <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
-      <div className="task-list">
-        <h1>
-          Add a new task list <CiCircleList />
-        </h1>
-        <div
-          style={{
-            paddingLeft: "1070px",
-            position: "absolute",
-            maxWidth: "15px",
-          }}
-        >
-          <GoogleLogin
-            clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
-            buttonText="Login with Google"
-            onSuccess={loginSuccess}
-            onFailure={loginSuccess}
-            cookiePolicy={"single_host_origin"}
-          />
-        </div>
-        <div className="date-component">
-          <ClockComponent />
-        </div>
-
-        <div className="all-tasklists">
-          <AddItemForm addItem={addList} />
-        </div>
-      </div>
-      <div className="App">
-        {todolists.map((tl) => {
-          let tasksForTodoList = task[tl.id];
-          if (tl.filter === "completed") {
-            tasksForTodoList = tasksForTodoList.filter(
-              (t) => t.isDone === true
-            );
-          }
-          if (tl.filter === "active") {
-            tasksForTodoList = tasksForTodoList.filter(
-              (t) => t.isDone === false
-            );
-          }
-
-          return (
-            <TodoList
-              changeDeadline={changeDeadline}
-              setDeadline={setDeadline}
-              key={tl.id}
-              deadline={deadline}
-              id={tl.id}
-              filter={tl.filter}
-              removeTodoList={removeTodoList}
-              title={tl.title}
-              task={tasksForTodoList}
-              removeTask={removeTask}
-              changeFilter={changeFilter}
-              addItem={addTask}
-              changeTaskStatus={changeTaskStatus}
-              changeTaskTitle={changeTaskTitle}
-              changeTodoListTitle={changeTodoListTitle}
-              setDeadlineCalendar={setDeadlineCalendar}
+    <>
+      <div className={nightMode ? "night-mode" : "light-mode"}>
+        <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
+        <div className="task-list">
+          <h1>
+            Add a new task list <CiCircleList />
+          </h1>
+          <div
+            style={{
+              paddingLeft: "1070px",
+              position: "absolute",
+              maxWidth: "15px",
+            }}
+          >
+            <GoogleLogin
+              clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={loginSuccess}
+              onFailure={loginSuccess}
+              cookiePolicy={"single_host_origin"}
             />
-          );
-        })}
+          </div>
+          <div className="date-component">
+            <ClockComponent />
+          </div>
+
+          <div className="all-tasklists">
+            <AddItemForm addItem={addList} />
+          </div>
+        </div>
+        <div className="App">
+          {todolists.map((tl) => {
+            let tasksForTodoList = task[tl.id];
+            if (tl.filter === "completed") {
+              tasksForTodoList = tasksForTodoList.filter(
+                (t) => t.isDone === true
+              );
+            }
+            if (tl.filter === "active") {
+              tasksForTodoList = tasksForTodoList.filter(
+                (t) => t.isDone === false
+              );
+            }
+
+            return (
+              <TodoList
+                changeDeadline={changeDeadline}
+                setDeadline={setDeadline}
+                key={tl.id}
+                deadline={deadline}
+                id={tl.id}
+                filter={tl.filter}
+                removeTodoList={removeTodoList}
+                title={tl.title}
+                task={tasksForTodoList}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
+                addItem={addTask}
+                changeTaskStatus={changeTaskStatus}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
+                setDeadlineCalendar={setDeadlineCalendar}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
