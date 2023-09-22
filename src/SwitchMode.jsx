@@ -1,6 +1,17 @@
+import { useEffect } from "react";
+
 function SwitchMode({ nightMode, setNightMode }) {
+  useEffect(() => {
+    const savedNightMode = localStorage.getItem("nightMode");
+    if (savedNightMode) {
+      setNightMode(savedNightMode === "true");
+    }
+  }, [setNightMode]);
+
   const toggleNightMode = () => {
     setNightMode(!nightMode);
+    // Save the new night mode value to local storage
+    localStorage.setItem("nightMode", (!nightMode).toString());
   };
 
   return (
