@@ -162,6 +162,7 @@ function TodoList({
             <FcCalendar
               className="deadline-button"
               onClick={() => setDeadlineCalendar(t.id, id, t.deadline, t.date)}
+              title="deadline"
             />
 
             {t.deadline && (

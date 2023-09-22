@@ -3,7 +3,7 @@ import "react-clock/dist/Clock.css";
 import Clock from "react-clock";
 
 function ClockComponent() {
-  const [value, setValue] = useState(new Date());
+  const [value, setValue] = useState<Date>(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => setValue(new Date()), 1000);
