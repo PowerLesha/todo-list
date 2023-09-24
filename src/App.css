@@ -93,8 +93,14 @@
   transform: translateX(30px);
 }
 
+@media (max-width: 1024px) {
+  .date-component {
+    display: none;
+  }
+}
+
 .date-component {
-  margin-left: 250px;
+  margin-left: 220px;
   position: absolute;
   margin-bottom: 100px;
 }
@@ -183,7 +189,12 @@
   width: 80px;
   height: min-content;
 }
-
+/* 
+@media (max-width: 1024px) {
+  .react-clock {
+    margin-left: 20px;
+  }
+} */
 .task-list {
   display: flex;
   flex-direction: column;
@@ -193,49 +204,28 @@
   flex-wrap: nowrap(default);
   margin-left: 500px;
 }
-
-.task-list {
-  @media (max-width: 1200px) {
-    margin-left: 100px;
+@media (max-width: 1024px) {
+  .task-list {
     margin-top: 100px;
-    h1 {
-      display: flex;
-      flex-direction: row;
-
-      width: 200px;
-    }
+    margin-left: 180px;
   }
+}
+
+.main-h1 {
+  position: unset;
+  width: 200px;
 }
 
 .standart-input {
   display: flex;
   flex-direction: row;
-
+  width: 235px;
   justify-content: center;
   border-radius: 5px;
   margin: 5px;
   transition-duration: 0.2s;
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}
-.task-list h1 {
-  @media (max-width: 1200px) {
-    width: 200px;
-    margin-left: 130px;
-  }
-}
-
-.standart-input {
-  @media (max-width: 1200px) {
-    width: 200px;
-    margin-left: 20px;
-  }
-}
-.all-tasklists {
-  @media (max-width: 1200px) {
-    width: 200px;
-    margin-left: 120px;
-  }
 }
 
 .input-button {

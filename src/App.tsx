@@ -24,6 +24,19 @@ function App() {
   const [login, setLogin] = useState(true);
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
+  const style: React.CSSProperties = {
+    paddingLeft: "1070px",
+    position: "absolute",
+    maxWidth: "50px",
+    marginBottom: "90px",
+    marginLeft: "34px",
+  };
+  const mediaQuery = `(max-width: 1000px)`;
+  if (window.matchMedia(mediaQuery).matches) {
+    // If the condition is met, update the style
+    style.marginRight = "805px";
+    style.marginBottom = "280px";
+  }
   const loginSuccess = (response: any) => {
     setLogin(false);
     console.log("Logged in successfully:", response);
@@ -205,16 +218,12 @@ function App() {
       <div className={nightMode ? "night-mode" : "light-mode"}>
         <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
         <div className="task-list">
-          <h1>
-            Add a new task list <CiCircleList />
-          </h1>
-          <div
-            style={{
-              paddingLeft: "1070px",
-              position: "absolute",
-              maxWidth: "15px",
-            }}
-          >
+          <div className="main-h1">
+            <h1>
+              Add a new task list <CiCircleList />
+            </h1>
+          </div>
+          <div style={style}>
             <GoogleLogin
               clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
               buttonText="Login with Google"
