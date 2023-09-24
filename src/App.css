@@ -221,7 +221,7 @@
 .task-list h1 {
   @media (max-width: 1200px) {
     width: 200px;
-    margin-left: 100px;
+    margin-left: 130px;
   }
 }
 
@@ -232,9 +232,9 @@
   }
 }
 .all-tasklists {
-  @media (max-width: 700px) {
+  @media (max-width: 1200px) {
     width: 200px;
-    margin-left: 100px;
+    margin-left: 120px;
   }
 }
 
