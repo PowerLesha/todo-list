@@ -20,7 +20,6 @@ type TasksStateType = {
   [key: string]: Array<TaskType>;
 };
 function App() {
-  const [deadline, setDeadline] = useState(false);
   const [_, setLogin] = useState(true);
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
@@ -257,9 +256,7 @@ function App() {
             return (
               <TodoList
                 changeDeadline={changeDeadline}
-                setDeadline={setDeadline}
                 key={tl.id}
-                deadline={deadline}
                 id={tl.id}
                 filter={tl.filter}
                 removeTodoList={removeTodoList}

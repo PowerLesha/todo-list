@@ -18,8 +18,6 @@ export type TaskType = {
 
 type PropsType = {
   changeDeadline: Function;
-  deadline: boolean;
-  setDeadline: Function;
   title: string;
   id: string;
   removeTask: Function;
@@ -161,7 +159,7 @@ function TodoList({
             </button>
             <FcCalendar
               className="deadline-button"
-              onClick={() => setDeadlineCalendar(t.id, id, t.deadline, t.date)}
+              onClick={() => setDeadlineCalendar(t.id, id)}
               title="deadline"
             />
 
