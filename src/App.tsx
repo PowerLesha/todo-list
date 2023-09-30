@@ -21,7 +21,7 @@ type TasksStateType = {
 };
 function App() {
   const [deadline, setDeadline] = useState(false);
-  const [login, setLogin] = useState(true);
+  const [_, setLogin] = useState(true);
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
   const style: React.CSSProperties = {
@@ -56,7 +56,7 @@ function App() {
     if (tasks !== undefined) {
       tasks.forEach((t) => {
         if (t.id === id) {
-          t.deadline = !t.deadline;
+          t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
         }
       });
       setTask({ ...task });
