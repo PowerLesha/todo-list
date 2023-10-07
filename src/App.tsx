@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import TodoList, { TaskType } from "./TodoList";
+import TodoList, { TaskType } from "./components/TodoList";
 import { v4 } from "uuid";
-import { AddItemForm } from "./AddItemForm";
+import { AddItemForm } from "./components/AddItemForm";
 import { CiCircleList } from "react-icons/ci";
-import ClockComponent from "./ClockComponent";
-import SwitchMode from "./SwitchMode";
+import ClockComponent from "./components/ClockComponent";
+import SwitchMode from "./components/SwitchMode";
 import { GoogleLogin } from "react-google-login";
 
 export type FilterValuesType = "all" | "active" | "completed";
@@ -50,7 +50,7 @@ function App() {
     setTask({ ...task });
   }
 
-  function setDeadlineCalendar(id: string, todolistId: string) {
+  function onHandleSetDeadlineCalendar(id: string, todolistId: string) {
     let tasks = task[todolistId];
     if (tasks !== undefined) {
       tasks.forEach((t) => {
@@ -62,7 +62,11 @@ function App() {
     }
   }
 
-  function changeDeadline(id: string, todolistId: string, newDate: Date) {
+  function onHandleChangeDeadline(
+    id: string,
+    todolistId: string,
+    newDate: Date
+  ) {
     let tasks = task[todolistId];
     if (tasks !== undefined) {
       tasks.forEach((t) => {
@@ -255,7 +259,7 @@ function App() {
 
             return (
               <TodoList
-                changeDeadline={changeDeadline}
+                changeDeadline={onHandleChangeDeadline}
                 key={tl.id}
                 id={tl.id}
                 filter={tl.filter}
@@ -268,7 +272,7 @@ function App() {
                 changeTaskStatus={changeTaskStatus}
                 changeTaskTitle={changeTaskTitle}
                 changeTodoListTitle={changeTodoListTitle}
-                setDeadlineCalendar={setDeadlineCalendar}
+                setDeadlineCalendar={onHandleSetDeadlineCalendar}
               />
             );
           })}

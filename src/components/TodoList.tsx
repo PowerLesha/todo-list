@@ -1,5 +1,5 @@
 import React from "react";
-import { FilterValuesType } from "./App";
+import { FilterValuesType } from "../App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
 import { Checkbox } from "@mui/material";
