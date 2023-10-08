@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import TodoList, { TaskType } from "./components/TodoList";
 import { v4 } from "uuid";
@@ -50,51 +50,33 @@ function App() {
     setTask({ ...task });
   }
 
-  const onHandleSetDeadlineCalendar = useCallback(
-    (id: string, todolistId: string): void => {
-      let tasks = task[todolistId];
-      if (tasks !== undefined) {
-        tasks.forEach((t) => {
-          if (t.id === id) {
-            t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
-          }
-        });
-        setTask({ ...task });
-      }
-    },
-    []
-  );
+  function onHandleSetDeadlineCalendar(id: string, todolistId: string) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
+        }
+      });
+      setTask({ ...task });
+    }
+  }
 
-  const onHandleChangeDeadline = useCallback(
-    (id: string, todolistId: string, newDate: Date): void => {
-      let tasks = task[todolistId];
-      if (tasks !== undefined) {
-        tasks.forEach((t) => {
-          if (t.id === id) {
-            t.date = newDate; // Set the date property when the deadline is enabled
-          }
-        });
-        setTask({ ...task });
-      }
-    },
-    []
-  );
-
-  // function onHandleChangeDeadline(
-  //   id: string,
-  //   todolistId: string,
-  //   newDate: Date
-  // ) {
-  //   let tasks = task[todolistId];
-  //   if (tasks !== undefined) {
-  //     tasks.forEach((t) => {
-  //       if (t.id === id) {
-  //         t.date = newDate; // Set the date property when the deadline is enabled
-  //       }
-  //     });
-  //     setTask({ ...task });
-  //   }
-  // }
+  function onHandleChangeDeadline(
+    id: string,
+    todolistId: string,
+    newDate: Date
+  ) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.date = newDate; // Set the date property when the deadline is enabled
+        }
+      });
+      setTask({ ...task });
+    }
+  }
 
   function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
     let tasks = task[todolistId];
