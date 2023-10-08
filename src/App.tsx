@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import TodoList, { TaksType } from "./TodoList";
+import TodoList, { TaskType } from "./components/TodoList";
 import { v4 } from "uuid";
-import { AddItemForm } from "./AddItemForm";
+import { AddItemForm } from "./components/AddItemForm";
 import { CiCircleList } from "react-icons/ci";
-import DateComponent from "./DateComponent";
+import ClockComponent from "./components/ClockComponent";
+import SwitchMode from "./components/SwitchMode";
+import { GoogleLogin } from "react-google-login";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -12,11 +14,32 @@ type TodolistType = {
   title: string;
   filter: FilterValuesType;
 };
-
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 type TasksStateType = {
-  [key: string]: Array<TaksType>;
+  [key: string]: Array<TaskType>;
 };
 function App() {
+  const [_, setLogin] = useState(true);
+  const [nightMode, setNightMode] = useState(false);
+  const deadlineDate = useState<Value>(null);
+  const style: React.CSSProperties = {
+    paddingLeft: "1070px",
+    position: "absolute",
+    maxWidth: "50px",
+    marginBottom: "90px",
+    marginLeft: "34px",
+  };
+  const mediaQuery = `(max-width: 1000px)`;
+  if (window.matchMedia(mediaQuery).matches) {
+    // If the condition is met, update the style
+    style.marginRight = "805px";
+    style.marginBottom = "280px";
+  }
+  const loginSuccess = (response: any) => {
+    setLogin(false);
+    console.log("Logged in successfully:", response);
+  };
   function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
     let tasks = task[todolistId];
     let tasker = tasks.find((t) => t.id === id);
@@ -25,6 +48,34 @@ function App() {
     }
 
     setTask({ ...task });
+  }
+
+  function onHandleSetDeadlineCalendar(id: string, todolistId: string) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
+        }
+      });
+      setTask({ ...task });
+    }
+  }
+
+  function onHandleChangeDeadline(
+    id: string,
+    todolistId: string,
+    newDate: Date
+  ) {
+    let tasks = task[todolistId];
+    if (tasks !== undefined) {
+      tasks.forEach((t) => {
+        if (t.id === id) {
+          t.date = newDate; // Set the date property when the deadline is enabled
+        }
+      });
+      setTask({ ...task });
+    }
   }
 
   function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
@@ -49,6 +100,8 @@ function App() {
       id: v4(),
       title: title,
       isDone: false,
+      deadline: false,
+      date: deadlineDate,
     };
     let tasks = task[todolistId];
     let newTasks = [newTask, ...tasks];
@@ -92,17 +145,46 @@ function App() {
 
   let [task, setTask] = useState<TasksStateType>({
     [todolistId1]: [
-      { id: v4(), title: "blabla", isDone: true },
-      { id: v4(), title: "Html", isDone: true },
-      { id: v4(), title: "gabascript", isDone: false },
-      { id: v4(), title: "hahahah", isDone: true },
-      { id: v4(), title: "hahahah", isDone: true },
+      {
+        id: v4(),
+        title: "Html",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
+      {
+        id: v4(),
+        title: "gabascript",
+        isDone: false,
+        deadline: false,
+        date: deadlineDate,
+      },
     ],
     [todolistId2]: [
-      { id: v4(), title: "book", isDone: true },
-      { id: v4(), title: "coffee", isDone: false },
+      {
+        id: v4(),
+        title: "book",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
+      {
+        id: v4(),
+        title: "coffee",
+        isDone: false,
+        deadline: false,
+        date: deadlineDate,
+      },
     ],
-    [todolistId3]: [{ id: v4(), title: "smth", isDone: true }],
+    [todolistId3]: [
+      {
+        id: v4(),
+        title: "smth",
+        isDone: true,
+        deadline: false,
+        date: deadlineDate,
+      },
+    ],
   });
 
   function addList(title: string) {
@@ -132,56 +214,71 @@ function App() {
       const parsedTasks = JSON.parse(savedTasks);
       setTask(parsedTasks);
     }
-    console.log(savedTodoLists);
-    console.log(savedTasks);
   }, []);
 
   return (
-    <div>
-      <div className="task-list">
-        <h1>
-          Add a new task list <CiCircleList />
-        </h1>
-        <div className="date-component">
-          <DateComponent />
-        </div>
-        <div className="all-tasklists">
-          <AddItemForm addItem={addList} />
-        </div>
-      </div>
-      <div className="App">
-        {todolists.map((tl) => {
-          let tasksForTodoList = task[tl.id];
-          if (tl.filter === "completed") {
-            tasksForTodoList = tasksForTodoList.filter(
-              (t) => t.isDone === true
-            );
-          }
-          if (tl.filter === "active") {
-            tasksForTodoList = tasksForTodoList.filter(
-              (t) => t.isDone === false
-            );
-          }
-
-          return (
-            <TodoList
-              key={tl.id}
-              id={tl.id}
-              filter={tl.filter}
-              removeTodoList={removeTodoList}
-              title={tl.title}
-              task={tasksForTodoList}
-              removeTask={removeTask}
-              changeFilter={changeFilter}
-              addItem={addTask}
-              changeTaskStatus={changeTaskStatus}
-              changeTaskTitle={changeTaskTitle}
-              changeTodoListTitle={changeTodoListTitle}
+    <>
+      <div className={nightMode ? "night-mode" : "light-mode"}>
+        <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
+        <div className="task-list">
+          <div className="main-h1">
+            <h1>
+              Add a new task list <CiCircleList />
+            </h1>
+          </div>
+          <div style={style}>
+            <GoogleLogin
+              clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={loginSuccess}
+              onFailure={loginSuccess}
+              cookiePolicy={"single_host_origin"}
             />
-          );
-        })}
+          </div>
+          <div className="date-component">
+            <ClockComponent />
+          </div>
+
+          <div className="all-tasklists">
+            <AddItemForm addItem={addList} />
+          </div>
+        </div>
+        <div className="App">
+          {todolists.map((tl) => {
+            let tasksForTodoList = task[tl.id];
+            if (tl.filter === "completed") {
+              tasksForTodoList = tasksForTodoList.filter(
+                (t) => t.isDone === true
+              );
+            }
+            if (tl.filter === "active") {
+              tasksForTodoList = tasksForTodoList.filter(
+                (t) => t.isDone === false
+              );
+            }
+
+            return (
+              <TodoList
+                changeDeadline={onHandleChangeDeadline}
+                key={tl.id}
+                id={tl.id}
+                filter={tl.filter}
+                removeTodoList={removeTodoList}
+                title={tl.title}
+                task={tasksForTodoList}
+                removeTask={removeTask}
+                changeFilter={changeFilter}
+                addItem={addTask}
+                changeTaskStatus={changeTaskStatus}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
+                setDeadlineCalendar={onHandleSetDeadlineCalendar}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

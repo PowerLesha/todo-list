@@ -1,23 +1,31 @@
 import React from "react";
-import { FilterValuesType } from "./App";
+import { FilterValuesType } from "../App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
 import { Checkbox } from "@mui/material";
+import DatePicker from "react-date-picker";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
+import { FcCalendar } from "react-icons/fc";
 
-export type TaksType = {
+export type TaskType = {
   id: string;
   title: string;
   isDone: boolean;
+  deadline: boolean;
+  date: any;
 };
 
 type PropsType = {
+  changeDeadline: Function;
   title: string;
   id: string;
   removeTask: Function;
-  removeTodoList: Function;
-  changeFilter: Function;
+  removeTodoList: (id: string) => void;
+  changeFilter: (type: FilterValuesType, todolistId: string) => void;
+  setDeadlineCalendar: Function;
   filter: FilterValuesType;
-  task: Array<TaksType>;
+  task: Array<TaskType>;
   addItem: (title: string, todolistId: string) => void;
   changeTaskStatus: (
     taskId: string,
@@ -33,6 +41,7 @@ type PropsType = {
 };
 
 function TodoList({
+  changeDeadline,
   title,
   id,
   removeTask,
@@ -44,6 +53,7 @@ function TodoList({
   changeTaskStatus,
   changeTaskTitle,
   changeTodoListTitle,
+  setDeadlineCalendar,
 }: PropsType) {
   const onAllClickHandler = () => changeFilter("all", id);
   const onCompletedClickHandler = () => changeFilter("completed", id);
@@ -147,6 +157,19 @@ function TodoList({
             >
               X
             </button>
+            <FcCalendar
+              className="deadline-button"
+              onClick={() => setDeadlineCalendar(t.id, id)}
+              title="deadline"
+            />
+
+            {t.deadline && (
+              <DatePicker
+                onChange={(newDate) => changeDeadline(t.id, id, newDate)}
+                value={t.date}
+                className="react-date-picker__wrapper"
+              />
+            )}
           </li>
         ))}
       </ul>
