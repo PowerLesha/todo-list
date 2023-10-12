@@ -1,9 +1,12 @@
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 type SwitchModeProps = {
   nightMode: boolean;
   setNightMode: (nightMode: boolean) => void;
 };
-function SwitchMode({ nightMode, setNightMode }: SwitchModeProps) {
+const SwitchMode = memo(function SwitchMode({
+  nightMode,
+  setNightMode,
+}: SwitchModeProps) {
   useEffect(() => {
     const savedNightMode = localStorage.getItem("nightMode");
     if (savedNightMode) {
@@ -36,6 +39,6 @@ function SwitchMode({ nightMode, setNightMode }: SwitchModeProps) {
       </>
     </div>
   );
-}
+});
 
 export default SwitchMode;

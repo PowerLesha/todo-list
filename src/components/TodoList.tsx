@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { FilterValuesType } from "../App";
 import { AddItemForm } from "./AddItemForm";
 import { EditableSpan } from "./EditableSpan";
@@ -40,7 +40,7 @@ type PropsType = {
   changeTodoListTitle: (id: string, newTitle: string) => void;
 };
 
-function TodoList({
+const TodoList = memo(function TodoList({
   changeDeadline,
   title,
   id,
@@ -198,6 +198,6 @@ function TodoList({
       </div>
     </div>
   );
-}
+});
 
 export default TodoList;
