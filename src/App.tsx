@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import TodoList, { TaskType } from "./components/TodoList";
 import { v4 } from "uuid";
@@ -23,108 +23,6 @@ function App() {
   const [_, setLogin] = useState(true);
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
-  const style: React.CSSProperties = {
-    paddingLeft: "1070px",
-    position: "absolute",
-    maxWidth: "50px",
-    marginBottom: "90px",
-    marginLeft: "34px",
-  };
-  const mediaQuery = `(max-width: 1000px)`;
-  if (window.matchMedia(mediaQuery).matches) {
-    // If the condition is met, update the style
-    style.marginRight = "805px";
-    style.marginBottom = "280px";
-  }
-  const loginSuccess = (response: any) => {
-    setLogin(false);
-    console.log("Logged in successfully:", response);
-  };
-  function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
-    let tasks = task[todolistId];
-    let tasker = tasks.find((t) => t.id === id);
-    if (tasker) {
-      tasker.isDone = isDone;
-    }
-
-    setTask({ ...task });
-  }
-
-  function onHandleSetDeadlineCalendar(id: string, todolistId: string) {
-    let tasks = task[todolistId];
-    if (tasks !== undefined) {
-      tasks.forEach((t) => {
-        if (t.id === id) {
-          t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
-        }
-      });
-      setTask({ ...task });
-    }
-  }
-
-  function onHandleChangeDeadline(
-    id: string,
-    todolistId: string,
-    newDate: Date
-  ) {
-    let tasks = task[todolistId];
-    if (tasks !== undefined) {
-      tasks.forEach((t) => {
-        if (t.id === id) {
-          t.date = newDate; // Set the date property when the deadline is enabled
-        }
-      });
-      setTask({ ...task });
-    }
-  }
-
-  function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
-    let tasks = task[todolistId];
-    let tasker = tasks.find((t) => t.id === id);
-    if (tasker) {
-      tasker.title = newTitle;
-    }
-
-    setTask({ ...task });
-  }
-
-  function removeTask(id: string, todolistId: string) {
-    let tasks = task[todolistId];
-    let filteredTask = tasks.filter((t) => t.id !== id);
-    task[todolistId] = filteredTask;
-    setTask({ ...task });
-  }
-
-  function addTask(title: string, todolistId: string) {
-    let newTask = {
-      id: v4(),
-      title: title,
-      isDone: false,
-      deadline: false,
-      date: deadlineDate,
-    };
-    let tasks = task[todolistId];
-    let newTasks = [newTask, ...tasks];
-    task[todolistId] = newTasks;
-    setTask({ ...task });
-  }
-
-  function changeFilter(value: FilterValuesType, todolistId: string) {
-    let todolist = todolists.find((tl) => tl.id === todolistId);
-    if (todolist) {
-      todolist.filter = value;
-      setTodoLists([...todolists]);
-    }
-  }
-
-  function changeTodoListTitle(id: string, newTitle: string) {
-    let todolist = todolists.find((tl) => tl.id === id);
-    if (todolist) {
-      todolist.title = newTitle;
-      setTodoLists([...todolists]);
-    }
-  }
-
   let todolistId1 = v4();
 
   let todolistId2 = v4();
@@ -136,14 +34,7 @@ function App() {
     { id: todolistId2, title: "What to buy", filter: "completed" },
     { id: todolistId3, title: "what to do", filter: "all" },
   ]);
-
-  let removeTodoList = (todolistId: string) => {
-    let filteredTodoList = todolists.filter((tl) => tl.id !== todolistId);
-
-    setTodoLists(filteredTodoList);
-  };
-
-  let [task, setTask] = useState<TasksStateType>({
+  const [task, setTask] = useState<TasksStateType>({
     [todolistId1]: [
       {
         id: v4(),
@@ -186,6 +77,137 @@ function App() {
       },
     ],
   });
+
+  const style: React.CSSProperties = {
+    paddingLeft: "1070px",
+    position: "absolute",
+    maxWidth: "50px",
+    marginBottom: "90px",
+    marginLeft: "34px",
+  };
+  const mediaQuery = `(max-width: 1000px)`;
+  if (window.matchMedia(mediaQuery).matches) {
+    // If the condition is met, update the style
+    style.marginRight = "805px";
+    style.marginBottom = "280px";
+  }
+  const loginSuccess = (response: any) => {
+    setLogin(false);
+    console.log("Logged in successfully:", response);
+  };
+  const changeTaskStatus = useCallback(
+    (id: string, isDone: boolean, todolistId: string) => {
+      let tasks = task[todolistId];
+      let tasker = tasks.find((t) => t.id === id);
+      if (tasker) {
+        tasker.isDone = isDone;
+      }
+
+      setTask({ ...task });
+    },
+    [task]
+  );
+
+  const onHandleSetDeadlineCalendar = useCallback(
+    (id: string, todolistId: string) => {
+      let tasks = task[todolistId];
+      if (tasks !== undefined) {
+        tasks.forEach((t) => {
+          if (t.id === id) {
+            t.deadline = !t.deadline; // Toggle deadline icon to be able to set the deadline
+          }
+        });
+        setTask({ ...task });
+      }
+    },
+    [task]
+  );
+
+  const onHandleChangeDeadline = useCallback(
+    (id: string, todolistId: string, newDate: Date) => {
+      let tasks = task[todolistId];
+      if (tasks !== undefined) {
+        tasks.forEach((t) => {
+          if (t.id === id) {
+            t.date = newDate; // Set the date property when the deadline is enabled
+          }
+        });
+        setTask({ ...task });
+      }
+    },
+    [task]
+  );
+
+  const changeTaskTitle = useCallback(
+    (id: string, newTitle: string, todolistId: string) => {
+      let tasks = task[todolistId];
+      let tasker = tasks.find((t) => t.id === id);
+      if (tasker) {
+        tasker.title = newTitle;
+      }
+
+      setTask({ ...task });
+    },
+    [task]
+  );
+
+  const removeTask = useCallback(
+    (id: string, todolistId: string) => {
+      let tasks = task[todolistId];
+      let filteredTask = tasks.filter((t) => t.id !== id);
+      task[todolistId] = filteredTask;
+      setTask({ ...task });
+    },
+    [task]
+  );
+
+  const addTask = useCallback(
+    (title: string, todolistId: string) => {
+      let newTask = {
+        id: v4(),
+        title: title,
+        isDone: false,
+        deadline: false,
+        date: deadlineDate,
+      };
+      let tasks = task[todolistId];
+      let newTasks = [newTask, ...tasks];
+      task[todolistId] = newTasks;
+      setTask({ ...task });
+    },
+    [task, deadlineDate]
+  );
+
+  const changeFilter = useCallback(
+    (value: FilterValuesType, todolistId: string) => {
+      let todolist = todolists.find((tl) => tl.id === todolistId);
+      if (todolist) {
+        todolist.filter = value;
+        setTodoLists([...todolists]);
+      }
+    },
+    [todolists]
+  );
+
+  const changeTodoListTitle = useCallback(
+    (id: string, newTitle: string) => {
+      let todolist = todolists.find((tl) => tl.id === id);
+      if (todolist) {
+        todolist.title = newTitle;
+        setTodoLists([...todolists]);
+      }
+    },
+    [todolists]
+  );
+
+  const removeTodoList = useCallback(
+    (todolistId: string) => {
+      let filteredTodoList = todolists.filter((tl) => tl.id !== todolistId);
+
+      setTodoLists(filteredTodoList);
+    },
+    [todolists]
+  );
 
   function addList(title: string) {
     let todolist: TodolistType = {
