@@ -160,7 +160,7 @@
 
 .active-filter {
   font-size: large;
-  background-color: rgb(48, 119, 200);
+  background-color: rgba(249, 0, 29, 0.286);
   border-radius: 5px;
 }
 
@@ -189,12 +189,7 @@
   width: 80px;
   height: min-content;
 }
-/* 
-@media (max-width: 1024px) {
-  .react-clock {
-    margin-left: 20px;
-  }
-} */
+
 .task-list {
   display: flex;
   flex-direction: column;
@@ -253,23 +248,21 @@
   margin-block: 10px;
 }
 .tasks-buttons:hover {
-  background-color: rgb(66, 48, 200);
+  background-color: rgb(192, 43, 43);
 }
 
 .tasks-buttons:active {
   font-size: large;
-  background-color: rgb(65, 102, 212);
+  background-color: rgb(135, 3, 3);
   box-shadow: 0 3px #666;
   transform: translateY(2px);
 }
 .remove-buttons {
   cursor: pointer;
   color: #f4472d;
-
   margin-left: 2px;
   height: 20px;
   font-size: 11px;
-
   transition-duration: 0.2s;
   box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
@@ -294,7 +287,6 @@
   font-weight: 600;
   font-size: 11px;
   padding-top: 0.5px;
-
   justify-content: space-around;
   width: 20px;
   margin-left: 5px;
