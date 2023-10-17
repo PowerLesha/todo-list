@@ -7,7 +7,6 @@ import { CiCircleList } from "react-icons/ci";
 import ClockComponent from "./components/ClockComponent";
 import SwitchMode from "./components/SwitchMode";
 import { GoogleLogin } from "react-google-login";
-import { title } from "process";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -220,7 +219,7 @@ function App() {
       setTodoLists([todolist, ...todolists]);
       setTask({ ...task, [todolist.id]: [] });
     },
-    [task, todolists, task.title]
+    [task, todolists]
   );
 
   useEffect(() => {
