@@ -1,10 +1,12 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, memo, useState } from "react";
 import { VscEdit } from "react-icons/vsc";
 export type EditableSpanPropsType = {
   title: string;
   onChange: (newValue: string) => void;
 };
-export function EditableSpan(props: EditableSpanPropsType) {
+export const EditableSpan = memo(function EditableSpan(
+  props: EditableSpanPropsType
+) {
   let [editMode, setEditMode] = useState(false);
   let [title, setTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -19,16 +21,9 @@ export function EditableSpan(props: EditableSpanPropsType) {
     } else setError("title is required");
   };
 
-  const addNewTask = () => {
-    if (title.trim() !== "") {
-      setTitle(title.trim());
-      setTitle("");
-    } else setError("title is required");
-  };
   const onEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setError(null);
     if (e.key === "Enter") {
-      addNewTask();
       activateViewMode();
     }
   };
@@ -74,4 +69,4 @@ export function EditableSpan(props: EditableSpanPropsType) {
       )}
     </div>
   );
-}
+});

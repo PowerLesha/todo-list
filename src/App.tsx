@@ -7,6 +7,7 @@ import { CiCircleList } from "react-icons/ci";
 import ClockComponent from "./components/ClockComponent";
 import SwitchMode from "./components/SwitchMode";
 import { GoogleLogin } from "react-google-login";
+import { title } from "process";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -175,7 +176,7 @@ function App() {
       task[todolistId] = newTasks;
       setTask({ ...task });
     },
-    [task, deadlineDate]
+    [task, deadlineDate, todolists]
   );
 
   const changeFilter = useCallback(
@@ -209,15 +210,18 @@ function App() {
     [todolists]
   );
 
-  function addList(title: string) {
-    let todolist: TodolistType = {
-      id: v4(),
-      title: title,
-      filter: "all",
-    };
-    setTodoLists([todolist, ...todolists]);
-    setTask({ ...task, [todolist.id]: [] });
-  }
+  const addList = useCallback(
+    (title: string) => {
+      let todolist: TodolistType = {
+        id: v4(),
+        title: title,
+        filter: "all",
+      };
+      setTodoLists([todolist, ...todolists]);
+      setTask({ ...task, [todolist.id]: [] });
+    },
+    [task, todolists, task.title]
+  );
 
   useEffect(() => {
     // Save todolists and task to localStorage
