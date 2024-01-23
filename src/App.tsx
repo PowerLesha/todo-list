@@ -20,7 +20,6 @@ type TasksStateType = {
   [key: string]: Array<TaskType>;
 };
 function App() {
-  const [_, setLogin] = useState(true);
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
   let todolistId1 = v4();
@@ -91,10 +90,7 @@ function App() {
     style.marginRight = "805px";
     style.marginBottom = "280px";
   }
-  const loginSuccess = (response: any) => {
-    setLogin(false);
-    console.log("Logged in successfully:", response);
-  };
+
   const changeTaskStatus = useCallback(
     (id: string, isDone: boolean, todolistId: string) => {
       let tasks = task[todolistId];
@@ -251,15 +247,7 @@ function App() {
               Add a new task list <CiCircleList />
             </h1>
           </div>
-          <div style={style}>
-            <GoogleLogin
-              clientId="628100592681-gjtv7a1ooc89mubcapqlj68jv3q3gsr1.apps.googleusercontent.com"
-              buttonText="Login with Google"
-              onSuccess={loginSuccess}
-              onFailure={loginSuccess}
-              cookiePolicy={"single_host_origin"}
-            />
-          </div>
+          <div style={style}></div>
           <div className="date-component">
             <ClockComponent />
           </div>
