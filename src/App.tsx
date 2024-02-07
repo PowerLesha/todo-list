@@ -6,7 +6,7 @@ import { AddItemForm } from "./components/AddItemForm";
 import { CiCircleList } from "react-icons/ci";
 import ClockComponent from "./components/ClockComponent";
 import SwitchMode from "./components/SwitchMode";
-import { GoogleLogin } from "react-google-login";
+import TodoWithRedux from "./components/NewTodo/TodoWithRedux";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -20,6 +20,12 @@ type TasksStateType = {
   [key: string]: Array<TaskType>;
 };
 function App() {
+  const [todoWithRedux, setTodoWithRedux] = useState(false);
+
+  const handleSetTodoWithRedux = () => {
+    setTodoWithRedux(!todoWithRedux);
+  };
+
   const [nightMode, setNightMode] = useState(false);
   const deadlineDate = useState<Value>(null);
   let todolistId1 = v4();
@@ -239,8 +245,16 @@ function App() {
 
   return (
     <>
+      {todoWithRedux && <TodoWithRedux />}
+
       <div className={nightMode ? "night-mode" : "light-mode"}>
         <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
+        <div className="another-todo">
+          <h3>Try another todo app created with Redux Toolkit</h3>
+          <button className="tasks-buttons" onClick={handleSetTodoWithRedux}>
+            Click here
+          </button>
+        </div>
         <div className="task-list">
           <div className="main-h1">
             <h1>

@@ -199,6 +199,18 @@
   flex-wrap: nowrap(default);
   margin-left: 500px;
 }
+.another-todo {
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  flex-direction: column;
+  width: 200px;
+  margin-left: 270px;
+}
+.another-todo h3 {
+  width: 180px;
+}
 @media (max-width: 1024px) {
   .task-list {
     margin-top: 100px;
