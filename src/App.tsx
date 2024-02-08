@@ -7,6 +7,7 @@ import { CiCircleList } from "react-icons/ci";
 import ClockComponent from "./components/ClockComponent";
 import SwitchMode from "./components/SwitchMode";
 import TodoWithRedux from "./components/NewTodo/TodoWithRedux";
+import MockApiTrigger from "./components/MockApiTrigger";
 
 export type FilterValuesType = "all" | "active" | "completed";
 type TodolistType = {
@@ -246,7 +247,7 @@ function App() {
   return (
     <>
       {todoWithRedux && <TodoWithRedux />}
-
+      <MockApiTrigger />
       <div className={nightMode ? "night-mode" : "light-mode"}>
         <SwitchMode nightMode={nightMode} setNightMode={setNightMode} />
         <div className="another-todo">

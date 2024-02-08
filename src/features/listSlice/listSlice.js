@@ -1,4 +1,7 @@
+// listSlice.js
+
 import { createSlice } from "@reduxjs/toolkit";
+import mockApiService from "../../components/MockApiService.js";
 
 const initialState = {
   taskLists: [],
@@ -8,85 +11,61 @@ const listSlice = createSlice({
   name: "list",
   initialState,
   reducers: {
-    // addTaskList(state, action) {
-    //   const newList = {
-    //     id: action.payload,
-    //     title: action.payload,
-    //     tasks: [{}],
-    //   };
-    //   state.taskLists.push(newList);
-    // },
+    // Add task list action
     addTaskList(state, action) {
-      const { id, title } = action.payload;
+      const { id, title, tasks } = action.payload; // Extract tasks from payload
       const newList = {
-        id: action.payload.id,
-        title: action.payload.title,
-        tasks: [],
+        id,
+        title,
+        tasks: tasks || [], // Ensure tasks array is initialized
       };
       state.taskLists.push(newList);
+
+      // Make a POST request to add the new list and its tasks to the mock API
+      mockApiService.addTaskList(newList);
     },
+
+    // Delete task list action
     deleteTaskList(state, action) {
       state.taskLists = state.taskLists.filter(
         (list) => list.id !== action.payload
       );
     },
+
+    // Update task title action
     updateTaskTitle(state, action) {
+      // Update task title in Redux state only, no need to update in mock API
       const { listId, taskId, title } = action.payload;
       const listToUpdate = state.taskLists.find((list) => list.id === listId);
       if (listToUpdate) {
-        // Find the task within the list and update its title
-        const updatedTasks = listToUpdate.tasks.map((task) =>
-          task.id === taskId ? { ...task, title } : task
+        const taskToUpdate = listToUpdate.tasks.find(
+          (task) => task.id === taskId
         );
-        // Update the task list with the updated tasks
-        const updatedList = { ...listToUpdate, tasks: updatedTasks };
-        // Return the updated state with the modified list
-        return {
-          ...state,
-          taskLists: state.taskLists.map((list) =>
-            list.id === listId ? updatedList : list
-          ),
-        };
-      }
-      return state; // Return the unchanged state if listToUpdate is not found
-    },
-    updateTaskListTitle(state, action) {
-      const listToUpdate = state.taskLists.find(
-        (list) => list.id === action.payload.id
-      );
-      if (listToUpdate) {
-        listToUpdate.title = action.payload.title;
-      }
-    },
-    addOneTask(state, action) {
-      const list = state.taskLists.find(
-        (list) => list.id === action.payload.listId
-      );
-      if (list) {
-        list.tasks.push(action.payload.task);
-      }
-    },
-    deleteTask(state, action) {
-      const list = state.taskLists.find(
-        (list) => list.id === action.payload.listId
-      );
-      if (list) {
-        list.tasks = list.tasks.filter(
-          (task) => task.id !== action.payload.taskId
-        );
-      }
-    },
-    updateTaskStatus(state, action) {
-      const list = state.taskLists.find(
-        (list) => list.id === action.payload.listId
-      );
-      if (list) {
-        const task = list.tasks.find(
-          (task) => task.id === action.payload.taskId
-        );
-        if (task) {
-          task.isDone = action.payload.isDone;
+        if (taskToUpdate) {
+          taskToUpdate.title = title;
         }
+      }
+    },
+
+    // Update task list title action
+    updateTaskListTitle(state, action) {
+      const { listId, title } = action.payload;
+      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      if (listToUpdate) {
+        listToUpdate.title = title;
+      }
+    },
+
+    // Add one task action
+
+    addOneTask(state, action) {
+      const { listId, task, index } = action.payload;
+
+      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      if (listToUpdate) {
+        listToUpdate.tasks.push(task);
+        // Make a POST request to add the new task to the mock API
+        mockApiService.addOneTask(listId, task);
       }
     },
   },
@@ -96,10 +75,8 @@ export const {
   addTaskList,
   deleteTaskList,
   updateTaskTitle,
-  addOneTask,
-  deleteTask,
-  updateTaskStatus,
   updateTaskListTitle,
+  addOneTask,
 } = listSlice.actions;
 
 export const selectTaskLists = (state) => state.list.taskLists;
