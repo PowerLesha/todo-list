@@ -9,11 +9,12 @@ import {
   updateTaskStatus,
   selectTaskLists,
   updateTaskListTitle,
+  deleteOneTask,
 } from "../../features/listSlice/listSlice";
 import { v4 } from "uuid";
 
 function TodoWithRedux() {
-  const taskLists = useSelector((state) => state.lists.taskLists);
+  const taskLists = useSelector(selectTaskLists);
   const dispatch = useDispatch();
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [selectedListId, setSelectedListId] = useState("");
@@ -39,16 +40,16 @@ function TodoWithRedux() {
       setNewTaskTitle("");
     }
   };
+  const handleDeleteTask = (listId, taskId) => {
+    dispatch(deleteOneTask({ listId, taskId }));
+  };
 
-  const handleDeleteList = useCallback(
-    (listId) => {
-      dispatch(deleteTaskList(listId));
-    },
-    [dispatch]
-  );
+  const handleDeleteList = (listId) => {
+    dispatch(deleteTaskList({ listId: listId }));
+  };
 
-  const handleUpdateTitle = (listId, newTitle) => {
-    dispatch(updateTaskTitle({ id: listId, title: newTitle }));
+  const handleUpdateTaskTitle = (listId, newTitle) => {
+    dispatch(updateTaskListTitle({ listId, title: newTitle }));
   };
 
   const handleEditTask = (taskId, taskTitle) => {
@@ -109,18 +110,9 @@ function TodoWithRedux() {
               <input
                 type="text"
                 value={list.title}
-                onChange={(e) =>
-                  dispatch(
-                    updateTaskListTitle({
-                      id: list.id,
-                      title: e.target.value,
-                    })
-                  )
-                }
+                onChange={(e) => handleUpdateTaskTitle(list.id, e.target.value)}
               />
-              <button onClick={() => dispatch(deleteTaskList(list.id))}>
-                Delete
-              </button>
+              <button onClick={() => handleDeleteList(list.id)}>Delete</button>
 
               <ul>
                 {list.tasks.map((task) => (
@@ -151,6 +143,11 @@ function TodoWithRedux() {
                           onClick={() => handleEditTask(task.id, task.title)}
                         >
                           Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteTask(list.id, task.id)}
+                        >
+                          Delete
                         </button>
                       </>
                     )}

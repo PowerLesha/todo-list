@@ -27,9 +27,8 @@ const listSlice = createSlice({
 
     // Delete task list action
     deleteTaskList(state, action) {
-      state.taskLists = state.taskLists.filter(
-        (list) => list.id !== action.payload
-      );
+      const { listId } = action.payload;
+      state.taskLists = state.taskLists.filter((list) => list.id !== listId);
     },
 
     // Update task title action
@@ -68,6 +67,20 @@ const listSlice = createSlice({
         mockApiService.addOneTask(listId, task);
       }
     },
+
+    deleteOneTask(state, action) {
+      const { listId, taskId } = action.payload;
+
+      // Find the list in the state
+      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+
+      if (listToUpdate) {
+        // Filter out the task with the specified taskId
+        listToUpdate.tasks = listToUpdate.tasks.filter(
+          (task) => task.id !== taskId
+        );
+      }
+    },
   },
 });
 
@@ -77,8 +90,9 @@ export const {
   updateTaskTitle,
   updateTaskListTitle,
   addOneTask,
+  deleteOneTask,
 } = listSlice.actions;
 
-export const selectTaskLists = (state) => state.list.taskLists;
+export const selectTaskLists = (state) => state.lists.taskLists;
 
 export default listSlice.reducer;
