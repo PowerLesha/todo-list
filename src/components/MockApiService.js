@@ -14,6 +14,25 @@ const mockApiService = {
       throw error;
     }
   },
+  deleteTaskList: async (listId, list) => {
+    try {
+      // Fetch the current list data
+      const response = await axios.get(`${baseURL}`);
+      const updatedListIndex = response.data.findIndex(
+        (list) => list.id === listId
+      );
+
+      const updatedList = response.data[updatedListIndex];
+      // Update the tasks array of the current list
+      updatedList.tasks = updatedList.tasks
+        ? [...updatedList.tasks, list]
+        : [list];
+      await axios.delete(`${baseURL}/${updatedListIndex + 1}`);
+    } catch (error) {
+      console.error("Error deleting task list:", error);
+      throw error;
+    }
+  },
   // Other functions omitted for brevity
   addOneTask: async (listId, task) => {
     try {
@@ -29,6 +48,26 @@ const mockApiService = {
         ? [...updatedList.tasks, task]
         : [task];
 
+      // Update the entire data with the new task added
+      await axios.put(`${baseURL}/${updatedListIndex + 1}`, updatedList);
+    } catch (error) {
+      console.error("Error adding task to list:", error);
+      throw error;
+    }
+  },
+  deleteOneTask: async (listId, taskId) => {
+    try {
+      // Fetch the current list data
+      const response = await axios.get(`${baseURL}`);
+      const updatedListIndex = response.data.findIndex(
+        (list) => list.id === listId
+      );
+
+      const updatedList = response.data[updatedListIndex];
+      // Update the tasks array of the current list
+      updatedList.tasks = updatedList.tasks.filter(
+        (task) => task.id !== taskId
+      );
       // Update the entire data with the new task added
       await axios.put(`${baseURL}/${updatedListIndex + 1}`, updatedList);
     } catch (error) {

@@ -29,6 +29,7 @@ const listSlice = createSlice({
     deleteTaskList(state, action) {
       const { listId } = action.payload;
       state.taskLists = state.taskLists.filter((list) => list.id !== listId);
+      mockApiService.deleteTaskList(listId);
     },
 
     // Update task title action
@@ -80,6 +81,7 @@ const listSlice = createSlice({
           (task) => task.id !== taskId
         );
       }
+      mockApiService.deleteOneTask(listId, taskId);
     },
   },
 });
