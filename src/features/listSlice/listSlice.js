@@ -1,11 +1,21 @@
 // listSlice.js
 
-import { createSlice } from "@reduxjs/toolkit";
-import mockApiService from "../../components/MockApiService.js";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import mockApiService, { baseURL } from "../../components/MockApiService.js";
+import axios from "axios";
 
 const initialState = {
   taskLists: [],
 };
+export const getAllLists = createAsyncThunk("list/getAllLists", async () => {
+  try {
+    const response = await axios.get(`${baseURL}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    throw error;
+  }
+});
 
 const listSlice = createSlice({
   name: "list",
@@ -20,7 +30,7 @@ const listSlice = createSlice({
         tasks: tasks || [], // Ensure tasks array is initialized
       };
       state.taskLists.push(newList);
-
+      // console.log(newList.id);
       // Make a POST request to add the new list and its tasks to the mock API
       mockApiService.addTaskList(newList);
     },
@@ -66,6 +76,7 @@ const listSlice = createSlice({
         listToUpdate.tasks.push(task);
         // Make a POST request to add the new task to the mock API
         mockApiService.addOneTask(listId, task);
+        // console.log(task.id);
       }
     },
 
@@ -83,6 +94,19 @@ const listSlice = createSlice({
       }
       mockApiService.deleteOneTask(listId, taskId);
     },
+    setTaskLists(state, action) {
+      state.taskLists = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllLists.fulfilled, (state, action) => {
+        console.log("Payload:", action.payload); // Log the payload received
+        state.taskLists = action.payload;
+      })
+      .addCase(getAllLists.rejected, (state, action) => {
+        console.error("Error fetching lists:", action.error);
+      });
   },
 });
 
@@ -93,6 +117,7 @@ export const {
   updateTaskListTitle,
   addOneTask,
   deleteOneTask,
+  setTaskLists,
 } = listSlice.actions;
 
 export const selectTaskLists = (state) => state.lists.taskLists;

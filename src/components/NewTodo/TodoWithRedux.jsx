@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTaskList,
@@ -10,8 +10,11 @@ import {
   selectTaskLists,
   updateTaskListTitle,
   deleteOneTask,
+  setTaskLists,
+  getAllLists,
 } from "../../features/listSlice/listSlice";
 import { v4 } from "uuid";
+import mockApiService from "../MockApiService";
 
 function TodoWithRedux() {
   const taskLists = useSelector(selectTaskLists);
@@ -21,6 +24,11 @@ function TodoWithRedux() {
   const [newListTitle, setNewListTitle] = useState("");
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editedTaskTitle, setEditedTaskTitle] = useState("");
+
+  useEffect(() => {
+    // Dispatch getAllLists when the component mounts
+    dispatch(getAllLists());
+  }, [dispatch]);
 
   const handleAddList = () => {
     if (newListTitle.trim() !== "") {
