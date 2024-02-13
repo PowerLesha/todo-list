@@ -24,6 +24,53 @@ const mockApiService = {
       throw error;
     }
   },
+  updateTaskListTitle: async (listId, title) => {
+    try {
+      // Fetch the current list data
+      const response = await axios.get(`${baseURL}`);
+      const updatedListIndex = response.data.findIndex(
+        (list) => list.id === listId
+      );
+      const indexParam = response.data[updatedListIndex].todo;
+      let updatedList = response.data[updatedListIndex];
+      // Update the tasks array of the current list
+      updatedList.title = title;
+      // Update the entire data with the new list title
+      await axios.put(`${baseURL}/${indexParam}`, updatedList);
+    } catch (error) {
+      console.error("Error updating task list title:", error);
+      throw error;
+    }
+  },
+  updateTaskTitle: async (listId, taskId, title) => {
+    try {
+      // Fetch the current list data
+      const response = await axios.get(`${baseURL}`);
+      const updatedListIndex = response.data.findIndex(
+        (list) => list.id === listId
+      );
+      const indexParam = response.data[updatedListIndex].todo;
+      let updatedList = response.data[updatedListIndex];
+
+      // updatedTask.title = title;
+      const updatedTaskIndex = updatedList.tasks.findIndex(
+        (task) => task.id === taskId
+      );
+
+      // If the task exists, update its title
+      if (updatedTaskIndex !== -1) {
+        updatedList.tasks[updatedTaskIndex].title = title;
+
+        // Update the entire data with the new list title
+        await axios.put(`${baseURL}/${indexParam}`, updatedList);
+      } else {
+        console.error("Task not found");
+      }
+    } catch (error) {
+      console.error("Error updating task list title:", error);
+      throw error;
+    }
+  },
   deleteTaskList: async (listId, list) => {
     try {
       // Fetch the current list data

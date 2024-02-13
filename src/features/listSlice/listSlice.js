@@ -53,6 +53,7 @@ const listSlice = createSlice({
         );
         if (taskToUpdate) {
           taskToUpdate.title = title;
+          mockApiService.updateTaskTitle(listId, taskId, title);
         }
       }
     },
@@ -63,6 +64,7 @@ const listSlice = createSlice({
       const listToUpdate = state.taskLists.find((list) => list.id === listId);
       if (listToUpdate) {
         listToUpdate.title = title;
+        mockApiService.updateTaskListTitle(listId, title);
       }
     },
 
