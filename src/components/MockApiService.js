@@ -71,6 +71,35 @@ const mockApiService = {
       throw error;
     }
   },
+  updateTaskStatus: async (listId, taskId, isDone) => {
+    try {
+      // Fetch the current list data
+      const response = await axios.get(`${baseURL}`);
+      const updatedListIndex = response.data.findIndex(
+        (list) => list.id === listId
+      );
+      const indexParam = response.data[updatedListIndex].todo;
+      let updatedList = response.data[updatedListIndex];
+
+      // updatedTask.title = title;
+      const updatedTaskIndex = updatedList.tasks.findIndex(
+        (task) => task.id === taskId
+      );
+
+      // If the task exists, update its title
+      if (updatedTaskIndex !== -1) {
+        updatedList.tasks[updatedTaskIndex].isDone = !isDone;
+
+        // Update the entire data with the new list title
+        await axios.put(`${baseURL}/${indexParam}`, updatedList);
+      } else {
+        console.error("Task not found");
+      }
+    } catch (error) {
+      console.error("Error updating task status:", error);
+      throw error;
+    }
+  },
   deleteTaskList: async (listId, list) => {
     try {
       // Fetch the current list data

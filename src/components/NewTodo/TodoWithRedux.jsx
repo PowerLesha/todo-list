@@ -59,7 +59,9 @@ function TodoWithRedux() {
   const handleUpdateTaskTitle = (listId, newTitle) => {
     dispatch(updateTaskListTitle({ listId, title: newTitle }));
   };
-
+  const handleUpdateTaskStatus = (listId, taskId, isDone) => {
+    dispatch(updateTaskStatus({ listId, taskId, isDone }));
+  };
   const handleEditTask = (taskId, taskTitle) => {
     setEditingTaskId(taskId);
     setEditedTaskTitle(taskTitle);
@@ -147,6 +149,17 @@ function TodoWithRedux() {
                     ) : (
                       <>
                         {task.title}
+                        <input
+                          checked={task.isDone}
+                          onChange={() =>
+                            handleUpdateTaskStatus(
+                              list.id,
+                              task.id,
+                              task.isDone
+                            )
+                          }
+                          type="checkbox"
+                        ></input>
                         <button
                           onClick={() => handleEditTask(task.id, task.title)}
                         >

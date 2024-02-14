@@ -96,6 +96,20 @@ const listSlice = createSlice({
       }
       mockApiService.deleteOneTask(listId, taskId);
     },
+    updateTaskStatus(state, action) {
+      const { listId, taskId, isDone } = action.payload;
+      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      if (listToUpdate) {
+        const taskToUpdate = listToUpdate.tasks.find(
+          (task) => task.id === taskId
+        );
+        if (taskToUpdate) {
+          taskToUpdate.isDone = !isDone;
+          // mockApiService.updateTaskTitle(listId, taskId, title);
+        }
+      }
+      mockApiService.updateTaskStatus(listId, taskId, isDone);
+    },
     setTaskLists(state, action) {
       state.taskLists = action.payload;
     },
@@ -120,6 +134,7 @@ export const {
   addOneTask,
   deleteOneTask,
   setTaskLists,
+  updateTaskStatus,
 } = listSlice.actions;
 
 export const selectTaskLists = (state) => state.lists.taskLists;
