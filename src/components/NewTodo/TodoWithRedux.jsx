@@ -5,20 +5,21 @@ import {
   deleteTaskList,
   updateTaskTitle,
   addOneTask,
-  deleteTask,
   updateTaskStatus,
   selectTaskLists,
   updateTaskListTitle,
   deleteOneTask,
-  setTaskLists,
   getAllLists,
 } from "../../features/listSlice/listSlice";
 import { v4 } from "uuid";
-import mockApiService from "../MockApiService";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+import Login from "./Login";
 
 function TodoWithRedux() {
   const taskLists = useSelector(selectTaskLists);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [selectedListId, setSelectedListId] = useState("");
   const [newListTitle, setNewListTitle] = useState("");
@@ -27,7 +28,9 @@ function TodoWithRedux() {
 
   useEffect(() => {
     // Dispatch getAllLists when the component mounts
-    dispatch(getAllLists());
+    dispatch(getAllLists()).then(() => {
+      setLoading(false);
+    });
   }, [dispatch]);
 
   const handleAddList = () => {
@@ -82,6 +85,7 @@ function TodoWithRedux() {
   return (
     <div className="App">
       <h1>Todo App</h1>
+
       <div>
         <input
           type="text"
@@ -115,70 +119,89 @@ function TodoWithRedux() {
             marginBottom: "100px",
           }}
         >
-          {taskLists.map((list) => (
-            <div key={list.id}>
-              <input
-                type="text"
-                value={list.title}
-                onChange={(e) => handleUpdateTaskTitle(list.id, e.target.value)}
+          {loading && (
+            <Button variant="primary" disabled>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
               />
-              <button onClick={() => handleDeleteList(list.id)}>Delete</button>
+              Loading...
+            </Button>
+          )}{" "}
+          {/* Render loader while loading */}{" "}
+          {!loading &&
+            taskLists.map((list) => (
+              <div key={list.id}>
+                <input
+                  type="text"
+                  value={list.title}
+                  onChange={(e) =>
+                    handleUpdateTaskTitle(list.id, e.target.value)
+                  }
+                />
+                <button onClick={() => handleDeleteList(list.id)}>
+                  Delete
+                </button>
 
-              <ul>
-                {list.tasks.map((task) => (
-                  <li key={task.id}>
-                    {editingTaskId === task.id ? (
-                      <>
-                        <input
-                          type="text"
-                          value={editedTaskTitle}
-                          onChange={(e) => setEditedTaskTitle(e.target.value)}
-                        />
-                        <button
-                          onClick={() =>
-                            handleSaveEditedTask(
-                              task.id,
-                              editedTaskTitle,
-                              list.id
-                            )
-                          }
-                        >
-                          Save
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        {task.title}
-                        <input
-                          checked={task.isDone}
-                          onChange={() =>
-                            handleUpdateTaskStatus(
-                              list.id,
-                              task.id,
-                              task.isDone
-                            )
-                          }
-                          type="checkbox"
-                        ></input>
-                        <button
-                          onClick={() => handleEditTask(task.id, task.title)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDeleteTask(list.id, task.id)}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                <ul>
+                  {list.tasks.map((task) => (
+                    <li key={task.id}>
+                      {editingTaskId === task.id ? (
+                        <>
+                          <input
+                            type="text"
+                            value={editedTaskTitle}
+                            onChange={(e) => setEditedTaskTitle(e.target.value)}
+                          />
+                          <button
+                            onClick={() =>
+                              handleSaveEditedTask(
+                                task.id,
+                                editedTaskTitle,
+                                list.id
+                              )
+                            }
+                          >
+                            Save
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {task.title}
+                          <input
+                            checked={task.isDone}
+                            onChange={() =>
+                              handleUpdateTaskStatus(
+                                list.id,
+                                task.id,
+                                task.isDone
+                              )
+                            }
+                            type="checkbox"
+                          ></input>
+                          <button
+                            onClick={() => handleEditTask(task.id, task.title)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleDeleteTask(list.id, task.id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
         </div>
       </div>
+      <Login />
     </div>
   );
 }

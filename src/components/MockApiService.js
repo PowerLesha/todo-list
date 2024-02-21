@@ -6,16 +6,6 @@ export const baseURL = "https://64ef0d31219b3e2873c3ddd0.mockapi.io/app/todo";
 
 const mockApiService = {
   // Function to add a task list and its tasks
-
-  getAllTasks: async () => {
-    try {
-      const response = await axios.get(`${baseURL}`);
-      return console.log(response.data), response.data;
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      throw error;
-    }
-  },
   addTaskList: async (newList) => {
     try {
       await axios.post(`${baseURL}`, newList);

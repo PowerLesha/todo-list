@@ -110,9 +110,6 @@ const listSlice = createSlice({
       }
       mockApiService.updateTaskStatus(listId, taskId, isDone);
     },
-    setTaskLists(state, action) {
-      state.taskLists = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,7 +130,7 @@ export const {
   updateTaskListTitle,
   addOneTask,
   deleteOneTask,
-  setTaskLists,
+
   updateTaskStatus,
 } = listSlice.actions;
 
