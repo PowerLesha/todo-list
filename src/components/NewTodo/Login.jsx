@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import SignIn from "./SingnIn";
 
-function Login() {
+function Login({ onLoginSuccess }) {
+  const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
   const handleSignUp = async () => {
     try {
       const response = await axios.post("http://localhost:5005/signup", {
@@ -26,32 +26,26 @@ function Login() {
         username,
         password,
       });
-      console.log(response.data);
+      const { token } = response.data;
+      localStorage.setItem("token", token); // Store token in local storage
       setError("");
-      // Redirect to dashboard or authenticated route if needed
+      onLoginSuccess(); // Call onLoginSuccess function upon successful login
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response?.data?.message || "An error occurred");
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+    <div style={{ width: "500px" }}>
+      <SignIn
+        handleSignIn={handleSignIn}
+        handleSignUp={handleSignUp}
+        setPassword={setPassword}
+        setUsername={setUsername}
+        password={password}
+        username={username}
+        error={error}
       />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleSignUp}>Sign Up</button>
-      <button onClick={handleSignIn}>Sign In</button>
-      {error && <p>{error}</p>}
     </div>
   );
 }
