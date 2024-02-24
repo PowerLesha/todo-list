@@ -70,6 +70,8 @@ const Login = ({
   password,
   setUsername,
   setPassword,
+  setEmail,
+  email,
   error,
 }) => {
   const [signUp, setSignUp] = useState(false);
@@ -77,9 +79,8 @@ const Login = ({
   return (
     <LoginWrap>
       <LoginHtml>
-        {error && <p>{error}</p>}
         <input
-          onClick={() => setSignUp(false)}
+          onChange={() => setSignUp(false)}
           id="tab-1"
           type="radio"
           name="tab"
@@ -91,7 +92,7 @@ const Login = ({
         </label>
         <input
           checked={signUp}
-          onClick={() => setSignUp(true)}
+          onChange={() => setSignUp(true)}
           id="tab-2"
           type="radio"
           name="tab"
@@ -102,7 +103,7 @@ const Login = ({
         </label>
 
         <LoginForm>
-          {signUp === false && (
+          {!signUp && (
             <div className="sign-in-htm">
               <Group>
                 <Label htmlFor="user" className="label">
@@ -164,7 +165,32 @@ const Login = ({
                 <Label htmlFor="user" className="label">
                   Username
                 </Label>
-                <Input id="user" type="text" className="input" />
+                <Input
+                  id="user"
+                  type="text"
+                  placeholder="Username"
+                  className="input"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                {error &&
+                  error.some((err) => err.errorType === "emptyUsername") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find((err) => err.errorType === "emptyUsername")
+                          ?.message
+                      }
+                    </p>
+                  )}
+                {error &&
+                  error.some((err) => err.errorType === "usernameTaken") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find((err) => err.errorType === "usernameTaken")
+                          ?.message
+                      }
+                    </p>
+                  )}
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -173,9 +199,21 @@ const Login = ({
                 <Input
                   id="pass"
                   type="password"
+                  placeholder="Password"
+                  value={password}
                   className="input"
                   data-type="password"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+                {error &&
+                  error.some((err) => err.errorType === "emptyPassword") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find((err) => err.errorType === "emptyPassword")
+                          ?.message
+                      }
+                    </p>
+                  )}
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -192,7 +230,33 @@ const Login = ({
                 <Label htmlFor="pass" className="label">
                   Email Address
                 </Label>
-                <Input id="pass" type="text" className="input" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  className="input"
+                  data-type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {error &&
+                  error.some((err) => err.errorType === "emptyEmail") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find((err) => err.errorType === "emptyEmail")
+                          ?.message
+                      }
+                    </p>
+                  )}
+                {error &&
+                  error.some((err) => err.errorType === "emailTaken") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find((err) => err.errorType === "emailTaken")
+                          ?.message
+                      }
+                    </p>
+                  )}
               </Group>
               <Group>
                 <Button
