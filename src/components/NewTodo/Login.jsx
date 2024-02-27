@@ -7,6 +7,7 @@ function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [signedUp, setSignedUp] = useState(false);
 
   const handleSignUp = async () => {
     try {
@@ -20,6 +21,7 @@ function Login({ onLoginSuccess }) {
       setUsername("");
       setPassword("");
       setEmail("");
+      setSignedUp(true);
       // Redirect to dashboard or authenticated route if needed
     } catch (error) {
       console.error("Error response:", error.response?.data); // Log the error response
@@ -35,11 +37,11 @@ function Login({ onLoginSuccess }) {
       const { token } = response.data;
       localStorage.setItem("token", token); // Store token in local storage
       setErrors("");
-      onLoginSuccess(); // Call onLoginSuccess function upon successful login
+      onLoginSuccess(username); // Call onLoginSuccess function upon successful login
       setUsername("");
       setPassword("");
     } catch (error) {
-      setErrors(error.response?.data?.message || "An error occurred");
+      setErrors(error.response?.data?.errors || "An error occurred");
     }
   };
 
@@ -55,6 +57,7 @@ function Login({ onLoginSuccess }) {
         password={password}
         username={username}
         error={errors}
+        signedUp={signedUp}
       />
     </div>
   );

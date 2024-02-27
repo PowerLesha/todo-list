@@ -73,6 +73,7 @@ const Login = ({
   setEmail,
   email,
   error,
+  signedUp,
 }) => {
   const [signUp, setSignUp] = useState(false);
 
@@ -117,7 +118,6 @@ const Login = ({
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
-                {/* <Input id="user" type="text" className="input" /> */}
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -132,13 +132,17 @@ const Login = ({
                   data-type="password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* <Input
-                  id="pass"
-                  type="password"
-                  className="input"
-                  data-type="password"
-                /> */}
               </Group>
+              {error &&
+                error.some((err) => err.errorType === "invalidCredentials") && (
+                  <p style={{ color: "red" }}>
+                    {
+                      error.find(
+                        (err) => err.errorType === "invalidCredentials"
+                      )?.message
+                    }
+                  </p>
+                )}
               <Group>
                 <input id="check" type="checkbox" className="check" checked />
                 <Label htmlFor="check">
@@ -266,6 +270,7 @@ const Login = ({
                   value="Sign Up"
                 />
               </Group>
+              {signedUp && <h2>Thank's for Signed Up</h2>}
               <Hr />
               <div className="foot-lnk">
                 <label htmlFor="tab-1">Already Member?</label>

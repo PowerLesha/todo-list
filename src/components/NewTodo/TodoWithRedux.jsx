@@ -26,13 +26,35 @@ function TodoWithRedux() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editedTaskTitle, setEditedTaskTitle] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user's authentication status
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = decodeToken(token);
+      setUsername(decodedToken.username);
+      setIsLoggedIn(true);
+    }
+
     // Dispatch getAllLists when the component mounts
     dispatch(getAllLists()).then(() => {
       setLoading(false);
     });
   }, [dispatch]);
+
+  const decodeToken = (token) => {
+    // Decode JWT token to get user information
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  };
 
   const handleAddList = () => {
     if (newListTitle.trim() !== "") {
@@ -86,16 +108,23 @@ function TodoWithRedux() {
     setEditingTaskId(null);
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (username) => {
     // Set isLoggedIn to true when login is successful
     setIsLoggedIn(true);
+    setUsername(username);
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    setUsername("");
+  };
   return (
     <div className="App">
       <h1>Todo App</h1>
       {isLoggedIn && ( // Render the todo list only if the user is logged in
         <div>
+          <h2>Welcome, {username}!</h2> {/* Display username */}
+          <button onClick={handleLogout}>Logout</button>
           <div>
             <input
               type="text"
