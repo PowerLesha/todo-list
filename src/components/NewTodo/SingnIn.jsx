@@ -5,10 +5,12 @@ const LoginWrap = styled.div`
   width: 100%;
   margin: auto;
   max-width: 525px;
-  min-height: 670px;
+  min-height: 470px;
+
   position: relative;
   background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
     no-repeat center;
+  background-size: cover;
   box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -22,7 +24,6 @@ const LoginHtml = styled.div`
 `;
 
 const LoginForm = styled.div`
-  min-height: 345px;
   position: relative;
   perspective: 1000px;
   transform-style: preserve-3d;
@@ -30,6 +31,7 @@ const LoginForm = styled.div`
 
 const Group = styled.div`
   margin-bottom: 15px;
+  margin-left: 50px;
 `;
 
 const Label = styled.label`
@@ -38,9 +40,10 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: 100%;
+  width: 80%;
   color: #fff;
-  display: block;
+  display: flex;
+
   border: none;
   padding: 15px 20px;
   border-radius: 25px;
@@ -48,10 +51,11 @@ const Input = styled.input`
 `;
 
 const Button = styled.input`
-  width: 100%;
+  width: 80%;
   color: #fff;
-  display: block;
+  display: inline;
   border: none;
+  margin-inline-start: 20px;
   padding: 15px 20px;
   border-radius: 25px;
   background: #1161ee;
@@ -68,6 +72,8 @@ const Login = ({
   handleSignUp,
   username,
   password,
+  confirmPassword,
+  setConfirmPassword,
   setUsername,
   setPassword,
   setEmail,
@@ -225,10 +231,23 @@ const Login = ({
                 </Label>
                 <Input
                   id="pass"
+                  value={confirmPassword}
+                  placeholder="Repeat password please"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   type="password"
                   className="input"
                   data-type="password"
                 />
+                {error &&
+                  error.some((err) => err.errorType === "passwordMismatch") && (
+                    <p style={{ color: "red" }}>
+                      {
+                        error.find(
+                          (err) => err.errorType === "passwordMismatch"
+                        )?.message
+                      }
+                    </p>
+                  )}
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">

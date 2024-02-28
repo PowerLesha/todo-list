@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Login from "./Login";
+import bg from "../../assets/images/Free-vector-realistic-3d-podium-background-Wallpaper (2).jpg";
 
 function TodoWithRedux() {
   const taskLists = useSelector(selectTaskLists);
@@ -119,7 +120,7 @@ function TodoWithRedux() {
     setUsername("");
   };
   return (
-    <div className="App">
+    <div className="Apps">
       <h1>Todo App</h1>
       {isLoggedIn && ( // Render the todo list only if the user is logged in
         <div>

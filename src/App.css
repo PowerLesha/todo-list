@@ -5,6 +5,21 @@
   max-height: max-content;
   flex-wrap: wrap;
 }
+.Apps {
+  padding: 50px;
+  display: flex;
+  max-width: 1920px;
+  max-height: max-content;
+  flex-wrap: wrap;
+  background-image: url("./assets/images/Free-vector-realistic-3d-podium-background-Wallpaper\ \(2\).jpg");
+}
+
+.sign-in {
+  margin-left: 140px;
+}
+.sign-up {
+  margin-left: 50px;
+}
 
 .night-mode {
   margin: 0;

@@ -6,6 +6,7 @@ function Login({ onLoginSuccess }) {
   const [errors, setErrors] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [signedUp, setSignedUp] = useState(false);
 
@@ -14,6 +15,7 @@ function Login({ onLoginSuccess }) {
       const response = await axios.post("http://localhost:5005/signup", {
         username,
         password,
+        confirmPassword,
         email,
       });
       console.log(response.data);
@@ -46,7 +48,13 @@ function Login({ onLoginSuccess }) {
   };
 
   return (
-    <div style={{ width: "500px" }}>
+    <div
+      style={{
+        width: "500px",
+        height: "650px",
+        marginLeft: "250px",
+      }}
+    >
       <SignIn
         handleSignIn={handleSignIn}
         handleSignUp={handleSignUp}
@@ -55,6 +63,8 @@ function Login({ onLoginSuccess }) {
         setEmail={setEmail}
         email={email}
         password={password}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
         username={username}
         error={errors}
         signedUp={signedUp}
