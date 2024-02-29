@@ -139,16 +139,20 @@ const Login = ({
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Group>
-              {error &&
-                error.some((err) => err.errorType === "invalidCredentials") && (
-                  <p style={{ color: "red" }}>
-                    {
-                      error.find(
-                        (err) => err.errorType === "invalidCredentials"
-                      )?.message
-                    }
-                  </p>
-                )}
+              <div className="login_error">
+                {error &&
+                  error.some(
+                    (err) => err.errorType === "invalidCredentials"
+                  ) && (
+                    <p style={{ color: "red", marginLeft: "50px" }}>
+                      {
+                        error.find(
+                          (err) => err.errorType === "invalidCredentials"
+                        )?.message
+                      }
+                    </p>
+                  )}
+              </div>
               <Group>
                 <input id="check" type="checkbox" className="check" checked />
                 <Label htmlFor="check">
@@ -164,9 +168,7 @@ const Login = ({
                 />
               </Group>
               <Hr />
-              <div className="foot-lnk">
-                <a href="#forgot">Forgot Password?</a>
-              </div>
+              <div className="foot-lnk">Forgot Password?</div>
             </div>
           )}
           {signUp && (
@@ -183,24 +185,28 @@ const Login = ({
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
-                {error &&
-                  error.some((err) => err.errorType === "emptyUsername") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find((err) => err.errorType === "emptyUsername")
-                          ?.message
-                      }
-                    </p>
-                  )}
-                {error &&
-                  error.some((err) => err.errorType === "usernameTaken") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find((err) => err.errorType === "usernameTaken")
-                          ?.message
-                      }
-                    </p>
-                  )}
+                <div className="login_error">
+                  {error &&
+                    error.some((err) => err.errorType === "emptyUsername") && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find((err) => err.errorType === "emptyUsername")
+                            ?.message
+                        }
+                      </p>
+                    )}
+                </div>
+                <div className="login_error">
+                  {error &&
+                    error.some((err) => err.errorType === "usernameTaken") && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find((err) => err.errorType === "usernameTaken")
+                            ?.message
+                        }
+                      </p>
+                    )}
+                </div>
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -215,15 +221,17 @@ const Login = ({
                   data-type="password"
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {error &&
-                  error.some((err) => err.errorType === "emptyPassword") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find((err) => err.errorType === "emptyPassword")
-                          ?.message
-                      }
-                    </p>
-                  )}
+                <div className="login_error">
+                  {error &&
+                    error.some((err) => err.errorType === "emptyPassword") && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find((err) => err.errorType === "emptyPassword")
+                            ?.message
+                        }
+                      </p>
+                    )}
+                </div>
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -238,16 +246,20 @@ const Login = ({
                   className="input"
                   data-type="password"
                 />
-                {error &&
-                  error.some((err) => err.errorType === "passwordMismatch") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find(
-                          (err) => err.errorType === "passwordMismatch"
-                        )?.message
-                      }
-                    </p>
-                  )}
+                <div className="login_error">
+                  {error &&
+                    error.some(
+                      (err) => err.errorType === "passwordMismatch"
+                    ) && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find(
+                            (err) => err.errorType === "passwordMismatch"
+                          )?.message
+                        }
+                      </p>
+                    )}
+                </div>
               </Group>
               <Group>
                 <Label htmlFor="pass" className="label">
@@ -262,24 +274,28 @@ const Login = ({
                   data-type="email"
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {error &&
-                  error.some((err) => err.errorType === "emptyEmail") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find((err) => err.errorType === "emptyEmail")
-                          ?.message
-                      }
-                    </p>
-                  )}
-                {error &&
-                  error.some((err) => err.errorType === "emailTaken") && (
-                    <p style={{ color: "red" }}>
-                      {
-                        error.find((err) => err.errorType === "emailTaken")
-                          ?.message
-                      }
-                    </p>
-                  )}
+                <div className="login_error">
+                  {error &&
+                    error.some((err) => err.errorType === "emptyEmail") && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find((err) => err.errorType === "emptyEmail")
+                            ?.message
+                        }
+                      </p>
+                    )}
+                </div>
+                <div className="login_error">
+                  {error &&
+                    error.some((err) => err.errorType === "emailTaken") && (
+                      <p style={{ color: "red" }}>
+                        {
+                          error.find((err) => err.errorType === "emailTaken")
+                            ?.message
+                        }
+                      </p>
+                    )}
+                </div>
               </Group>
               <Group>
                 <Button
@@ -289,10 +305,14 @@ const Login = ({
                   value="Sign Up"
                 />
               </Group>
-              {signedUp && <h2>Thank's for Signed Up</h2>}
+              {signedUp && (
+                <h2 style={{ marginLeft: "110px" }}>Thank's for Signed Up!</h2>
+              )}
               <Hr />
               <div className="foot-lnk">
-                <label htmlFor="tab-1">Already Member?</label>
+                <label htmlFor="tab-1" style={{ cursor: "pointer" }}>
+                  Already Member?
+                </label>
               </div>
             </div>
           )}

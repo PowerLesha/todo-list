@@ -22,6 +22,7 @@ function Login({ onLoginSuccess }) {
       setErrors([]); // Clear errors on success
       setUsername("");
       setPassword("");
+      setConfirmPassword("");
       setEmail("");
       setSignedUp(true);
       // Redirect to dashboard or authenticated route if needed

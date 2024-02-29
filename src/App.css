@@ -6,6 +6,8 @@
   flex-wrap: wrap;
 }
 .Apps {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   padding: 50px;
   display: flex;
   max-width: 1920px;
@@ -13,14 +15,35 @@
   flex-wrap: wrap;
   background-image: url("./assets/images/Free-vector-realistic-3d-podium-background-Wallpaper\ \(2\).jpg");
 }
-
+.foot-lnk {
+  margin-top: -80px;
+  margin-left: 180px;
+  cursor: pointer;
+}
+.todos {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  margin-top: 100px;
+  margin-left: -300px;
+}
+.todos div {
+  margin-inline: 50px;
+}
+.todo {
+  width: 270px;
+  max-width: 400px;
+}
 .sign-in {
   margin-left: 140px;
 }
 .sign-up {
   margin-left: 50px;
 }
-
+.user_header {
+  display: inline;
+  margin-left: 1000px;
+}
 .night-mode {
   margin: 0;
   padding-top: 15px;
@@ -159,7 +182,9 @@
 .App > div {
   margin-right: 50px;
 }
-
+.login_error {
+  font-weight: 500;
+}
 .error {
   border: red 1px solid;
   display: block;
