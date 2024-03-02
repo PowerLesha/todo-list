@@ -16,69 +16,87 @@ export const getAllLists = createAsyncThunk("list/getAllLists", async () => {
     throw error;
   }
 });
+export const addTaskList = createAsyncThunk(
+  "list/addTaskList",
+  async ({ id, title, tasks }, thunkAPI) => {
+    try {
+      // Make a POST request to add the new list and its tasks to the mock API
+      const response = await axios.post(`${baseURL}`, {
+        id,
+        title,
+        tasks: [],
+      });
 
+      // Return the response data, including the  `todo`
+      return response.data;
+    } catch (error) {
+      console.error("Error adding task list:", error);
+      throw error;
+    }
+  }
+);
 const listSlice = createSlice({
   name: "list",
   initialState,
   reducers: {
     // Add task list action
-    addTaskList(state, action) {
-      const { id, title, tasks } = action.payload; // Extract tasks from payload
-      const newList = {
-        id,
-        title,
-        tasks: tasks || [], // Ensure tasks array is initialized
-      };
-      state.taskLists.push(newList);
-      // console.log(newList.id);
-      // Make a POST request to add the new list and its tasks to the mock API
-      mockApiService.addTaskList(newList);
-    },
 
     // Delete task list action
     deleteTaskList(state, action) {
-      const { listId } = action.payload;
-      state.taskLists = state.taskLists.filter((list) => list.id !== listId);
-      mockApiService.deleteTaskList(listId);
+      const { listId, todo } = action.payload;
+      state.taskLists = state.taskLists.filter((list) => list.todo !== todo);
+
+      mockApiService.deleteTaskList(listId, todo);
     },
 
     // Update task title action
     updateTaskTitle(state, action) {
       // Update task title in Redux state only, no need to update in mock API
-      const { listId, taskId, title } = action.payload;
-      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      const { todo, taskId, taskTitle } = action.payload;
+      const listToUpdate = state.taskLists.find((list) => list.todo === todo);
+
       if (listToUpdate) {
         const taskToUpdate = listToUpdate.tasks.find(
           (task) => task.id === taskId
         );
+
         if (taskToUpdate) {
-          taskToUpdate.title = title;
-          mockApiService.updateTaskTitle(listId, taskId, title);
+          taskToUpdate.title = taskTitle;
+
+          mockApiService.updateTaskTitle(todo, taskTitle);
         }
       }
     },
 
     // Update task list title action
     updateTaskListTitle(state, action) {
-      const { listId, title } = action.payload;
-      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      const { todo, title } = action.payload;
+      const listToUpdate = state.taskLists.find((list) => list.todo === todo);
       if (listToUpdate) {
         listToUpdate.title = title;
-        mockApiService.updateTaskListTitle(listId, title);
+        mockApiService.updateTaskListTitle(todo, title);
       }
     },
 
     // Add one task action
 
     addOneTask(state, action) {
-      const { listId, task, index } = action.payload;
+      const { id, todo, title, tasks } = action.payload;
 
-      const listToUpdate = state.taskLists.find((list) => list.id === listId);
-      if (listToUpdate) {
-        listToUpdate.tasks.push(task);
+      // Find the index of the list to update
+      const index = state.taskLists.findIndex((list) => list.id === id);
+
+      if (index !== -1) {
+        // Update the list with new data including the new task
+        const updatedList = (state.taskLists[index] = {
+          id: id,
+          todo: todo,
+          title: title,
+          tasks: [...state.taskLists[index].tasks, tasks], // Add the new task
+        });
+
         // Make a POST request to add the new task to the mock API
-        mockApiService.addOneTask(listId, task);
-        // console.log(task.id);
+        mockApiService.addOneTask(todo, updatedList);
       }
     },
 
@@ -119,12 +137,17 @@ const listSlice = createSlice({
       })
       .addCase(getAllLists.rejected, (state, action) => {
         console.error("Error fetching lists:", action.error);
+      })
+      .addCase(addTaskList.fulfilled, (state, action) => {
+        state.taskLists.push(action.payload); // Add the new list to taskLists
+      })
+      .addCase(addTaskList.rejected, (state, action) => {
+        state.error = action.error.message; // Store error message
       });
   },
 });
 
 export const {
-  addTaskList,
   deleteTaskList,
   updateTaskTitle,
   updateTaskListTitle,

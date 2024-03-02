@@ -6,58 +6,21 @@ export const baseURL = "https://64ef0d31219b3e2873c3ddd0.mockapi.io/app/todo";
 
 const mockApiService = {
   // Function to add a task list and its tasks
-  addTaskList: async (newList) => {
+
+  updateTaskListTitle: async (todo, title) => {
     try {
-      await axios.post(`${baseURL}`, newList);
+      await axios.put(`${baseURL}/${todo}`, { title: title });
     } catch (error) {
-      console.error("Error adding task list:", error);
+      console.error("Error updating task list title:", error);
       throw error;
     }
   },
-  updateTaskListTitle: async (listId, title) => {
+  updateTaskTitle: async (todo, taskId, taskTitle) => {
     try {
-      // Fetch the current list data
-      const response = await axios.get(`${baseURL}`);
-      const updatedListIndex = response.data.findIndex(
-        (list) => list.id === listId
-      );
-      const indexParam = response.data[updatedListIndex].todo;
-      let updatedList = response.data[updatedListIndex];
-      // Update the tasks array of the current list
-      updatedList.title = title;
       // Update the entire data with the new list title
-      await axios.put(`${baseURL}/${indexParam}`, updatedList);
+      await axios.put(`${baseURL}/${todo}`, { title: taskTitle });
     } catch (error) {
-      console.error("Error updating task list title:", error);
-      throw error;
-    }
-  },
-  updateTaskTitle: async (listId, taskId, title) => {
-    try {
-      // Fetch the current list data
-      const response = await axios.get(`${baseURL}`);
-      const updatedListIndex = response.data.findIndex(
-        (list) => list.id === listId
-      );
-      const indexParam = response.data[updatedListIndex].todo;
-      let updatedList = response.data[updatedListIndex];
-
-      // updatedTask.title = title;
-      const updatedTaskIndex = updatedList.tasks.findIndex(
-        (task) => task.id === taskId
-      );
-
-      // If the task exists, update its title
-      if (updatedTaskIndex !== -1) {
-        updatedList.tasks[updatedTaskIndex].title = title;
-
-        // Update the entire data with the new list title
-        await axios.put(`${baseURL}/${indexParam}`, updatedList);
-      } else {
-        console.error("Task not found");
-      }
-    } catch (error) {
-      console.error("Error updating task list title:", error);
+      console.error("Error updating task title:", error);
       throw error;
     }
   },
@@ -90,44 +53,21 @@ const mockApiService = {
       throw error;
     }
   },
-  deleteTaskList: async (listId, list) => {
+  deleteTaskList: async (listId, todo) => {
     try {
       // Fetch the current list data
-      const response = await axios.get(`${baseURL}`);
-      const updatedListIndex = response.data.findIndex(
-        (list) => list.id === listId
-      );
-      const indexParam = response.data[updatedListIndex].todo;
-      const updatedList = response.data[updatedListIndex];
-      // Update the tasks array of the current list
-      updatedList.tasks = updatedList.tasks
-        ? [...updatedList.tasks, list]
-        : [list];
-      await axios.delete(`${baseURL}/${indexParam}`);
+
+      await axios.delete(`${baseURL}/${todo}`);
     } catch (error) {
       console.error("Error deleting task list:", error);
       throw error;
     }
   },
   // Other functions omitted for brevity
-  addOneTask: async (listId, task) => {
+  addOneTask: async (todo, updatedList) => {
     try {
-      // Fetch the current list data
-      const response = await axios.get(`${baseURL}`);
-
-      const updatedListIndex = response.data.findIndex(
-        (list) => list.id === listId
-      );
-      const indexParam = response.data[updatedListIndex].todo;
-      console.log(response.data[updatedListIndex].todo);
-      const updatedList = response.data[updatedListIndex];
-      // Update the tasks array of the current list
-      updatedList.tasks = updatedList.tasks
-        ? [...updatedList.tasks, task]
-        : [task];
-
       // Update the entire data with the new task added
-      await axios.put(`${baseURL}/${indexParam}`, updatedList);
+      await axios.put(`${baseURL}/${todo}`, updatedList);
     } catch (error) {
       console.error("Error adding task to list:", error);
       throw error;

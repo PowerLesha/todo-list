@@ -41,7 +41,7 @@ function TodoWithRedux() {
       setLoading(false);
     });
   }, [dispatch]);
-
+  console.log(taskLists);
   const decodeToken = (token) => {
     // Decode JWT token to get user information
     const base64Url = token.split(".")[1];
@@ -58,20 +58,34 @@ function TodoWithRedux() {
 
   const handleAddList = () => {
     if (newListTitle.trim() !== "") {
-      dispatch(addTaskList({ id: uuidv4(), title: newListTitle }));
+      dispatch(addTaskList({ id: uuidv4(), title: newListTitle, tasks: [] }));
+
       setNewListTitle("");
     }
   };
 
   const handleAddTask = () => {
     if (newTaskTitle.trim() !== "" && selectedListId !== "") {
-      dispatch(
-        addOneTask({
-          listId: selectedListId,
-          task: { id: uuidv4(), title: newTaskTitle, isDone: false },
-        })
-      );
-      setNewTaskTitle("");
+      // Find the selected list using selectedListId
+      const selectedList = taskLists.find((list) => list.id === selectedListId);
+      if (selectedList) {
+        // Extract the todo value from the selected list
+        const todo = selectedList.todo;
+        const title = selectedList.title;
+        console.log(todo);
+        console.log(title);
+        // Dispatch addOneTask with the todo value
+        dispatch(
+          addOneTask({
+            id: selectedListId,
+            todo: todo,
+            title: title,
+
+            tasks: { id: uuidv4(), title: newTaskTitle, isDone: false },
+          })
+        );
+        setNewTaskTitle("");
+      }
     }
   };
 
@@ -79,12 +93,12 @@ function TodoWithRedux() {
     dispatch(deleteOneTask({ listId, taskId }));
   };
 
-  const handleDeleteList = (listId) => {
-    dispatch(deleteTaskList({ listId: listId }));
+  const handleDeleteList = (todo) => {
+    dispatch(deleteTaskList({ todo }));
   };
 
-  const handleUpdateTaskTitle = (listId, newTitle) => {
-    dispatch(updateTaskListTitle({ listId, title: newTitle }));
+  const handleUpdateTaskTitle = (todo, title) => {
+    dispatch(updateTaskListTitle({ todo, title }));
   };
 
   const handleUpdateTaskStatus = (listId, taskId, isDone) => {
@@ -96,13 +110,13 @@ function TodoWithRedux() {
     setEditedTaskTitle(taskTitle);
   };
 
-  const handleSaveEditedTask = (taskId, title, listId) => {
+  const handleSaveEditedTask = (todo, taskId, taskTitle) => {
     // Dispatch action to update task title
     dispatch(
       updateTaskTitle({
-        listId: listId,
-        taskId: taskId,
-        title: title,
+        todo,
+        taskId,
+        taskTitle,
       })
     );
     setEditingTaskId(null);
@@ -134,7 +148,7 @@ function TodoWithRedux() {
               value={newListTitle}
               onChange={(e) => setNewListTitle(e.target.value)}
             />
-            <button onClick={handleAddList}>Add List</button>
+            <button onClick={() => handleAddList()}>Add List</button>
 
             <div>
               <select onChange={(e) => setSelectedListId(e.target.value)}>
@@ -151,7 +165,7 @@ function TodoWithRedux() {
                 value={newTaskTitle}
                 onChange={(e) => setNewTaskTitle(e.target.value)}
               />
-              <button onClick={handleAddTask}>Add Task</button>
+              <button onClick={() => handleAddTask()}>Add Task</button>
             </div>
             <div
               style={{
@@ -181,15 +195,16 @@ function TodoWithRedux() {
                         type="text"
                         value={list.title}
                         onChange={(e) =>
-                          handleUpdateTaskTitle(list.id, e.target.value)
+                          handleUpdateTaskTitle(list.todo, e.target.value)
                         }
                       />
-                      <button onClick={() => handleDeleteList(list.id)}>
+
+                      <button onClick={() => handleDeleteList(list.todo)}>
                         Delete
                       </button>
 
                       <ul>
-                        {list.tasks.map((task) => (
+                        {list.tasks?.map((task) => (
                           <li key={task.id}>
                             {editingTaskId === task.id ? (
                               <>
@@ -203,9 +218,9 @@ function TodoWithRedux() {
                                 <button
                                   onClick={() =>
                                     handleSaveEditedTask(
+                                      list.todo,
                                       task.id,
-                                      editedTaskTitle,
-                                      list.id
+                                      editedTaskTitle
                                     )
                                   }
                                 >
