@@ -15,10 +15,10 @@ const mockApiService = {
       throw error;
     }
   },
-  updateTaskTitle: async (todo, taskId, taskTitle) => {
+  updateTaskTitle: async (todo, updatedList) => {
     try {
       // Update the entire data with the new list title
-      await axios.put(`${baseURL}/${todo}`, { title: taskTitle });
+      await axios.put(`${baseURL}/${todo}`, updatedList);
     } catch (error) {
       console.error("Error updating task title:", error);
       throw error;

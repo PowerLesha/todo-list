@@ -110,15 +110,27 @@ function TodoWithRedux() {
     setEditedTaskTitle(taskTitle);
   };
 
-  const handleSaveEditedTask = (todo, taskId, taskTitle) => {
+  const handleSaveEditedTask = (todo, newTaskTitle, editingTaskId) => {
     // Dispatch action to update task title
-    dispatch(
-      updateTaskTitle({
-        todo,
-        taskId,
-        taskTitle,
-      })
-    );
+
+    if (newTaskTitle.trim() !== "") {
+      // Find the selected list using selectedListId
+      const selectedList = taskLists.find((list) => list.todo === todo);
+
+      if (selectedList) {
+        // Dispatch addOneTask with the todo value
+        dispatch(
+          updateTaskTitle({
+            id: selectedList.id,
+            todo: todo,
+            title: selectedList.title,
+
+            tasks: { id: editingTaskId, title: newTaskTitle, isDone: false },
+            editingTaskId,
+          })
+        );
+      }
+    }
     setEditingTaskId(null);
   };
 
@@ -219,8 +231,8 @@ function TodoWithRedux() {
                                   onClick={() =>
                                     handleSaveEditedTask(
                                       list.todo,
-                                      task.id,
-                                      editedTaskTitle
+                                      editedTaskTitle,
+                                      editingTaskId
                                     )
                                   }
                                 >

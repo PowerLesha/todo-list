@@ -52,19 +52,26 @@ const listSlice = createSlice({
     // Update task title action
     updateTaskTitle(state, action) {
       // Update task title in Redux state only, no need to update in mock API
-      const { todo, taskId, taskTitle } = action.payload;
+      const { id, todo, title, tasks, editingTaskId } = action.payload;
       const listToUpdate = state.taskLists.find((list) => list.todo === todo);
+      const index = state.taskLists.findIndex((list) => list.id === id);
+      // const taskToUpdateIndex = state.taskLists[index].tasks.findIndex(
+      //   (task) => task.id === editingTaskId
+      // );
+      // state.taskLists[index].tasks[taskToUpdateIndex].title = title;
 
       if (listToUpdate) {
-        const taskToUpdate = listToUpdate.tasks.find(
-          (task) => task.id === taskId
-        );
+        const updatedList = (state.taskLists[index] = {
+          id: id,
+          todo: todo,
+          title: title,
+          tasks: state.taskLists[index].tasks.map((task) =>
+            task.id === editingTaskId ? { ...task, title: tasks.title } : task
+          ), // Add the new task
+        });
+        state.taskLists[index] = updatedList;
 
-        if (taskToUpdate) {
-          taskToUpdate.title = taskTitle;
-
-          mockApiService.updateTaskTitle(todo, taskTitle);
-        }
+        mockApiService.updateTaskTitle(todo, updatedList);
       }
     },
 
