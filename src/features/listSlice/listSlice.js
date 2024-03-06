@@ -51,11 +51,9 @@ const listSlice = createSlice({
 
     // Update task title action
     updateTaskTitle(state, action) {
-  
       const { id, todo, title, tasks, editingTaskId } = action.payload;
       const listToUpdate = state.taskLists.find((list) => list.todo === todo);
       const index = state.taskLists.findIndex((list) => list.id === id);
-    
 
       if (listToUpdate) {
         const updatedList = (state.taskLists[index] = {
@@ -68,7 +66,7 @@ const listSlice = createSlice({
         });
         state.taskLists[index] = updatedList;
 
-        mockApiService.updateTaskTitle(todo, updatedList);
+        mockApiService.updateTaskInList(todo, updatedList);
       }
     },
 
@@ -100,37 +98,49 @@ const listSlice = createSlice({
         });
 
         // Make a POST request to add the new task to the mock API
-        mockApiService.addOneTask(todo, updatedList);
+        mockApiService.updateTaskInList(todo, updatedList);
       }
     },
-
     deleteOneTask(state, action) {
-      const { listId, taskId } = action.payload;
+      const { todo, listId, taskId } = action.payload;
 
-      // Find the list in the state
-      const listToUpdate = state.taskLists.find((list) => list.id === listId);
+      // Find the index of the list to update
+      const index = state.taskLists.findIndex((list) => list.id === listId);
 
-      if (listToUpdate) {
+      if (index !== -1) {
         // Filter out the task with the specified taskId
-        listToUpdate.tasks = listToUpdate.tasks.filter(
+        const updatedTasks = state.taskLists[index].tasks.filter(
           (task) => task.id !== taskId
         );
+
+        // Update the tasks array within the list
+        state.taskLists[index].tasks = updatedTasks;
+        const updatedList = state.taskLists[index];
+
+        // Pass the updated list to the mock API service method
+        mockApiService.updateTaskInList(todo, updatedList);
       }
-      mockApiService.deleteOneTask(listId, taskId);
     },
+
     updateTaskStatus(state, action) {
-      const { listId, taskId, isDone } = action.payload;
-      const listToUpdate = state.taskLists.find((list) => list.id === listId);
-      if (listToUpdate) {
-        const taskToUpdate = listToUpdate.tasks.find(
-          (task) => task.id === taskId
+      const { todo, listId, taskId, isDone } = action.payload;
+
+      // Find the index of the list to update
+      const index = state.taskLists.findIndex((list) => list.id === listId);
+
+      if (index !== -1) {
+        // Update the task status
+        const updatedTasks = state.taskLists[index].tasks.map((task) =>
+          task.id === taskId ? { ...task, isDone: !isDone } : task
         );
-        if (taskToUpdate) {
-          taskToUpdate.isDone = !isDone;
-          // mockApiService.updateTaskTitle(listId, taskId, title);
-        }
+
+        // Update the tasks array within the list
+        state.taskLists[index].tasks = updatedTasks;
+        const updatedList = state.taskLists[index];
+
+        // Pass the updated list to the mock API service method
+        mockApiService.updateTaskInList(todo, updatedList);
       }
-      mockApiService.updateTaskStatus(listId, taskId, isDone);
     },
   },
   extraReducers: (builder) => {

@@ -89,8 +89,8 @@ function TodoWithRedux() {
     }
   };
 
-  const handleDeleteTask = (listId, taskId) => {
-    dispatch(deleteOneTask({ listId, taskId }));
+  const handleDeleteTask = (todo, listId, taskId) => {
+    dispatch(deleteOneTask({ todo, listId, taskId }));
   };
 
   const handleDeleteList = (todo) => {
@@ -101,8 +101,8 @@ function TodoWithRedux() {
     dispatch(updateTaskListTitle({ todo, title }));
   };
 
-  const handleUpdateTaskStatus = (listId, taskId, isDone) => {
-    dispatch(updateTaskStatus({ listId, taskId, isDone }));
+  const handleUpdateTaskStatus = (todo, listId, taskId, isDone) => {
+    dispatch(updateTaskStatus({ todo, listId, taskId, isDone }));
   };
 
   const handleEditTask = (taskId, taskTitle) => {
@@ -246,6 +246,7 @@ function TodoWithRedux() {
                                   checked={task.isDone}
                                   onChange={() =>
                                     handleUpdateTaskStatus(
+                                      list.todo,
                                       list.id,
                                       task.id,
                                       task.isDone
@@ -262,7 +263,11 @@ function TodoWithRedux() {
                                 </button>
                                 <button
                                   onClick={() =>
-                                    handleDeleteTask(list.id, task.id)
+                                    handleDeleteTask(
+                                      list.todo,
+                                      list.id,
+                                      task.id
+                                    )
                                   }
                                 >
                                   Delete
